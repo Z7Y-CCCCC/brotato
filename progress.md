@@ -201,3 +201,16 @@ Original prompt: 这个是我的游戏项目，但是有很多bug，之前添加
 - Added `original_wave_choice_count`, a new effect key that increases special-wave draft choices from the default 3 up to a capped 5.
 - Connected the effect to `Draft Captain` and `Risk Compass`, turning them into real draft-control build pieces instead of only chance/reward stat modifiers.
 - Updated the special-wave draft overlay so 4-choice and 5-choice drafts fit inside the panel without overflowing.
+
+### Original Character Rework Pass
+- Reworked four template-feeling original characters with signature mechanics:
+  - `Streak Broker`: special-wave clears now permanently grant Luck based on Risk.
+  - `Sun Gardener`: special-wave trees now grant temporary regeneration and permanent Harvesting on clear.
+  - `Mutation Duelist`: special waves now grant Risk-scaled Damage and Attack Speed.
+  - `Draft Captain`: extra draft choices now grant combat orders and reduce special-wave enemy count.
+- Added `original_character_mechanic_effect.gd` and four generated signature effect resources.
+- Updated the procedural character generator so these characters have distinct silhouettes/accessories instead of only palette swaps.
+- Validation passed:
+  - Asset generation script.
+  - Runtime character mechanic validator.
+  - Project parse/startup.

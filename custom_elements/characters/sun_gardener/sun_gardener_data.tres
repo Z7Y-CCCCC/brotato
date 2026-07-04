@@ -1,18 +1,19 @@
-[gd_resource type="Resource" load_steps=14 format=2]
+[gd_resource type="Resource" load_steps=15 format=2]
 
 [ext_resource path="res://items/characters/character_data.gd" type="Script" id=1]
 [ext_resource path="res://custom_elements/characters/sun_gardener/sun_gardener_icon_texture.tres" type="Texture" id=2]
-[ext_resource path="res://custom_elements/characters/sun_gardener/trees_effect.tres" type="Resource" id=3]
-[ext_resource path="res://custom_elements/characters/sun_gardener/special_trees_effect.tres" type="Resource" id=4]
-[ext_resource path="res://custom_elements/characters/sun_gardener/enemy_fruit_drops_effect.tres" type="Resource" id=5]
-[ext_resource path="res://custom_elements/characters/sun_gardener/special_harvesting_effect.tres" type="Resource" id=6]
-[ext_resource path="res://custom_elements/characters/sun_gardener/speed_tradeoff_effect.tres" type="Resource" id=7]
-[ext_resource path="res://weapons/melee/pruner/1/pruner_data.tres" type="Resource" id=8]
-[ext_resource path="res://weapons/melee/stick/1/stick_data.tres" type="Resource" id=9]
-[ext_resource path="res://custom_elements/characters/sun_gardener/sun_gardener_body_appearance.tres" type="Resource" id=10]
-[ext_resource path="res://custom_elements/characters/sun_gardener/sun_gardener_accessory_appearance.tres" type="Resource" id=11]
-[ext_resource path="res://custom_elements/characters/sun_gardener/sun_gardener_eyes_appearance.tres" type="Resource" id=12]
-[ext_resource path="res://custom_elements/characters/sun_gardener/sun_gardener_mouth_appearance.tres" type="Resource" id=13]
+[ext_resource path="res://custom_elements/characters/sun_gardener/signature_effect.tres" type="Resource" id=3]
+[ext_resource path="res://custom_elements/characters/sun_gardener/trees_effect.tres" type="Resource" id=4]
+[ext_resource path="res://custom_elements/characters/sun_gardener/special_trees_effect.tres" type="Resource" id=5]
+[ext_resource path="res://custom_elements/characters/sun_gardener/enemy_fruit_drops_effect.tres" type="Resource" id=6]
+[ext_resource path="res://custom_elements/characters/sun_gardener/special_harvesting_effect.tres" type="Resource" id=7]
+[ext_resource path="res://custom_elements/characters/sun_gardener/speed_tradeoff_effect.tres" type="Resource" id=8]
+[ext_resource path="res://weapons/melee/pruner/1/pruner_data.tres" type="Resource" id=9]
+[ext_resource path="res://weapons/melee/stick/1/stick_data.tres" type="Resource" id=10]
+[ext_resource path="res://custom_elements/characters/sun_gardener/sun_gardener_body_appearance.tres" type="Resource" id=11]
+[ext_resource path="res://custom_elements/characters/sun_gardener/sun_gardener_accessory_appearance.tres" type="Resource" id=12]
+[ext_resource path="res://custom_elements/characters/sun_gardener/sun_gardener_eyes_appearance.tres" type="Resource" id=13]
+[ext_resource path="res://custom_elements/characters/sun_gardener/sun_gardener_mouth_appearance.tres" type="Resource" id=14]
 
 [resource]
 script = ExtResource( 1 )
@@ -23,18 +24,18 @@ icon = ExtResource( 2 )
 name = "Sun Gardener"
 tier = 0
 value = 1
-effects = [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ) ]
+effects = [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ) ]
 tracking_text = ""
 is_lockable = true
 unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 0.0
 max_nb = -1
-item_appearances = [ ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ) ]
+item_appearances = [ ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ) ]
 tags = [  ]
 wanted_tags = [ "stat_harvesting", "exploration", "stat_luck" ]
 banned_item_groups = [  ]
 banned_items = [  ]
 banned_upgrades = [  ]
-starting_weapons = [ ExtResource( 8 ), ExtResource( 9 ) ]
+starting_weapons = [ ExtResource( 9 ), ExtResource( 10 ) ]
 starting_items = [  ]

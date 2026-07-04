@@ -52,6 +52,7 @@ const CHARACTER_SPECS := [
 		"colors": [Color(0.75, 0.46, 0.14), Color(1.0, 0.88, 0.3)],
 		"weapons": ["res://weapons/ranged/pistol/1/pistol_data.tres", "res://weapons/melee/scissors/1/scissors_data.tres"],
 		"effects": [
+			{"file": "signature_effect.tres", "type": "default", "script": "res://effects/items/original_character_mechanic_effect.gd", "key": "original_streak_broker", "value": 1},
 			{"file": "luck_effect.tres", "type": "default", "key": "stat_luck", "value": 12},
 			{"file": "event_chance_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_chance_effect.gd", "key": "original_wave_event_chance", "value": 20},
 			{"file": "streak_reward_effect.tres", "type": "default", "script": "res://effects/items/original_wave_streak_reward_effect.gd", "key": "original_wave_streak_reward", "value": 60},
@@ -66,6 +67,7 @@ const CHARACTER_SPECS := [
 		"colors": [Color(0.94, 0.62, 0.14), Color(0.22, 0.72, 0.28)],
 		"weapons": ["res://weapons/melee/pruner/1/pruner_data.tres", "res://weapons/melee/stick/1/stick_data.tres"],
 		"effects": [
+			{"file": "signature_effect.tres", "type": "default", "script": "res://effects/items/original_character_mechanic_effect.gd", "key": "original_sun_gardener", "value": 1},
 			{"file": "trees_effect.tres", "type": "default", "key": "trees", "value": 4},
 			{"file": "special_trees_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_trees_effect.gd", "key": "original_wave_event_trees", "value": 3},
 			{"file": "enemy_fruit_drops_effect.tres", "type": "default", "key": "enemy_fruit_drops", "value": 12},
@@ -80,6 +82,7 @@ const CHARACTER_SPECS := [
 		"colors": [Color(0.72, 0.12, 0.16), Color(0.88, 0.9, 1.0)],
 		"weapons": ["res://weapons/melee/spear/1/spear_data.tres", "res://weapons/ranged/taser/1/taser_data.tres"],
 		"effects": [
+			{"file": "signature_effect.tres", "type": "default", "script": "res://effects/items/original_character_mechanic_effect.gd", "key": "original_mutation_duelist", "value": 1},
 			{"file": "damage_effect.tres", "type": "default", "key": "stat_percent_damage", "value": 8},
 			{"file": "special_damage_effect.tres", "type": "event_stat", "stat": "stat_percent_damage", "value": 16},
 			{"file": "special_attack_speed_effect.tres", "type": "event_stat", "stat": "stat_attack_speed", "value": 10},
@@ -94,6 +97,7 @@ const CHARACTER_SPECS := [
 		"colors": [Color(0.16, 0.38, 0.78), Color(0.95, 0.86, 0.45)],
 		"weapons": ["res://weapons/ranged/double_barrel_shotgun/1/double_barrel_shotgun_data.tres", "res://weapons/ranged/laser_gun/1/laser_gun_data.tres"],
 		"effects": [
+			{"file": "signature_effect.tres", "type": "default", "script": "res://effects/items/original_character_mechanic_effect.gd", "key": "original_draft_captain", "value": 1},
 			{"file": "event_chance_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_chance_effect.gd", "key": "original_wave_event_chance", "value": 25},
 			{"file": "choice_count_effect.tres", "type": "default", "script": "res://effects/items/original_wave_choice_count_effect.gd", "key": "original_wave_choice_count", "value": 1},
 			{"file": "event_reward_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_reward_effect.gd", "key": "original_wave_event_reward", "value": 25},
@@ -228,7 +232,7 @@ func _generate_character(spec: Dictionary) -> void:
 	_make_dir(folder)
 	var colors = spec.colors
 	for part in ["body", "accessory", "eyes", "mouth", "icon"]:
-		_make_texture("%s/%s_%s" % [folder, spec.id, part], colors[0], colors[1], part)
+		_make_texture("%s/%s_%s" % [folder, spec.id, part], colors[0], colors[1], part, spec.id)
 
 	var appearances = []
 	appearances.append(_write_appearance(folder, spec.id, "body", 14, 0, 1.0))
@@ -247,7 +251,7 @@ func _generate_item(spec: Dictionary) -> void:
 	var folder = "%s/%s" % [ITEM_ROOT, spec.id]
 	_make_dir(folder)
 	var colors = spec.colors
-	_make_texture("%s/%s_icon" % [folder, spec.id], colors[0], colors[1], "item")
+	_make_texture("%s/%s_icon" % [folder, spec.id], colors[0], colors[1], "item", spec.id)
 
 	var effect_paths = []
 	for effect_spec in spec.effects:
@@ -271,7 +275,7 @@ func _write_file(path: String, content: String) -> void:
 	file.close()
 
 
-func _make_texture(base_path: String, base: Color, accent: Color, kind: String) -> void:
+func _make_texture(base_path: String, base: Color, accent: Color, kind: String, id: String = "") -> void:
 	var image = Image.new()
 	image.create(150, 150, false, Image.FORMAT_RGBA8)
 	image.lock()
@@ -279,14 +283,50 @@ func _make_texture(base_path: String, base: Color, accent: Color, kind: String) 
 
 	match kind:
 		"body":
-			_circle(image, Vector2(75, 80), 42, base)
-			_circle(image, Vector2(55, 58), 12, accent)
-			_circle(image, Vector2(95, 58), 12, accent)
-			_rect(image, Rect2(49, 106, 52, 13), base.darkened(0.25))
+			if id == "mutation_duelist":
+				_circle(image, Vector2(75, 80), 44, base)
+				_rect(image, Rect2(75, 36, 44, 88), accent.darkened(0.2))
+				_circle_outline(image, Vector2(75, 80), 48, Color(0.92, 0.92, 0.98), 3)
+			elif id == "draft_captain":
+				_circle(image, Vector2(75, 82), 40, base)
+				_rect(image, Rect2(42, 104, 66, 15), base.darkened(0.3))
+				_circle_outline(image, Vector2(75, 80), 50, accent, 3)
+			elif id == "sun_gardener":
+				_circle(image, Vector2(75, 80), 38, base)
+				for petal in [Vector2(75, 35), Vector2(75, 125), Vector2(30, 80), Vector2(120, 80)]:
+					_circle(image, petal, 16, accent)
+			elif id == "streak_broker":
+				_circle(image, Vector2(75, 80), 40, base)
+				_rect(image, Rect2(43, 47, 64, 66), base.darkened(0.18))
+				_circle(image, Vector2(104, 50), 12, accent)
+			else:
+				_circle(image, Vector2(75, 80), 42, base)
+				_circle(image, Vector2(55, 58), 12, accent)
+				_circle(image, Vector2(95, 58), 12, accent)
+				_rect(image, Rect2(49, 106, 52, 13), base.darkened(0.25))
 		"accessory":
-			_circle_outline(image, Vector2(75, 74), 54, accent, 4)
-			_rect(image, Rect2(38, 36, 74, 9), accent)
-			_rect(image, Rect2(68, 24, 14, 32), accent.lightened(0.12))
+			if id == "draft_captain":
+				_rect(image, Rect2(38, 34, 74, 13), accent)
+				_rect(image, Rect2(50, 23, 50, 18), accent.darkened(0.12))
+				_circle(image, Vector2(75, 32), 6, Color(1, 1, 1))
+				_rect(image, Rect2(72, 28, 6, 16), base.darkened(0.2))
+			elif id == "sun_gardener":
+				_circle(image, Vector2(75, 39), 18, accent)
+				_circle(image, Vector2(75, 39), 8, base.lightened(0.25))
+				_rect(image, Rect2(72, 50, 6, 28), accent.darkened(0.2))
+			elif id == "mutation_duelist":
+				_rect(image, Rect2(44, 42, 62, 12), accent)
+				_rect(image, Rect2(53, 27, 12, 25), accent.lightened(0.1))
+				_rect(image, Rect2(86, 27, 12, 25), base.darkened(0.35))
+			elif id == "streak_broker":
+				_rect(image, Rect2(49, 34, 52, 42), accent.darkened(0.08))
+				_rect(image, Rect2(57, 43, 36, 4), Color(0.16, 0.1, 0.04))
+				_rect(image, Rect2(57, 54, 36, 4), Color(0.16, 0.1, 0.04))
+				_circle(image, Vector2(102, 76), 10, accent.lightened(0.2))
+			else:
+				_circle_outline(image, Vector2(75, 74), 54, accent, 4)
+				_rect(image, Rect2(38, 36, 74, 9), accent)
+				_rect(image, Rect2(68, 24, 14, 32), accent.lightened(0.12))
 		"eyes":
 			_circle(image, Vector2(61, 72), 7, Color(0.08, 0.1, 0.12))
 			_circle(image, Vector2(89, 72), 7, Color(0.08, 0.1, 0.12))

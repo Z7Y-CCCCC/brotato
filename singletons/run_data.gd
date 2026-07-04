@@ -202,6 +202,7 @@ var base_run_accessibility_settings: = {}
 var active_original_wave_event: = {}
 var active_original_wave_mutation: = {}
 var pending_original_wave_choices: = []
+var active_original_wave_choice_pool_size: = 0
 var original_wave_clear_streak: = 0
 var constant_projectile: = 1
 
@@ -361,6 +362,7 @@ func choose_original_wave_event(choice_index: int) -> Dictionary:
 	var choice = pending_original_wave_choices[safe_index]
 	active_original_wave_event = choice.event.duplicate(true)
 	active_original_wave_mutation = choice.mutation.duplicate(true)
+	active_original_wave_choice_pool_size = pending_original_wave_choices.size()
 	pending_original_wave_choices.clear()
 	_apply_original_wave_event_scaling()
 	return active_original_wave_event.duplicate()
@@ -372,6 +374,7 @@ func clear_original_wave_event() -> void:
 	active_original_wave_event.clear()
 	active_original_wave_mutation.clear()
 	pending_original_wave_choices.clear()
+	active_original_wave_choice_pool_size = 0
 
 
 func has_original_wave_event() -> bool:
@@ -513,6 +516,25 @@ func apply_original_wave_event_player_stats(player_index: int) -> void:
 		TempStats.add_stat(stat_hash, stat_value, player_index)
 		emit_signal("stat_added", stat_hash, stat_value, 0.0, player_index)
 
+	var risk = get_active_original_wave_risk()
+	var duelist_power = get_player_effect(Keys.original_mutation_duelist_hash, player_index)
+	if duelist_power > 0 and risk > 0:
+		_add_original_wave_temp_stat(Keys.stat_percent_damage_hash, risk * 4 * duelist_power, player_index)
+		_add_original_wave_temp_stat(Keys.stat_attack_speed_hash, risk * 3 * duelist_power, player_index)
+
+	var sun_power = get_player_effect(Keys.original_sun_gardener_hash, player_index)
+	if sun_power > 0:
+		var tree_bonus = get_original_wave_event_tree_bonus()
+		if tree_bonus > 0:
+			_add_original_wave_temp_stat(Keys.stat_hp_regeneration_hash, max(1, tree_bonus * sun_power), player_index)
+			_add_original_wave_temp_stat(Keys.stat_elemental_damage_hash, max(1, int(tree_bonus / 2) * sun_power), player_index)
+
+	var captain_power = get_player_effect(Keys.original_draft_captain_hash, player_index)
+	var extra_choices = max(0, active_original_wave_choice_pool_size - 3)
+	if captain_power > 0 and extra_choices > 0:
+		_add_original_wave_temp_stat(Keys.stat_range_hash, extra_choices * 12 * captain_power, player_index)
+		_add_original_wave_temp_stat(Keys.stat_armor_hash, extra_choices * captain_power, player_index)
+
 	for special_wave_stat in get_player_effect(Keys.original_wave_event_stats_hash, player_index):
 		assert (special_wave_stat[0] is int)
 		var special_stat_hash = special_wave_stat[0]
@@ -521,8 +543,20 @@ func apply_original_wave_event_player_stats(player_index: int) -> void:
 		emit_signal("stat_added", special_stat_hash, special_stat_value, 0.0, player_index)
 
 
+func _add_original_wave_temp_stat(stat_hash: int, value: int, player_index: int) -> void:
+	if value == 0:
+		return
+	TempStats.add_stat(stat_hash, value, player_index)
+	emit_signal("stat_added", stat_hash, value, 0.0, player_index)
+
+
 func get_original_wave_event_enemy_count_mult() -> float:
-	return active_original_wave_event.get("enemy_count", 1.0)
+	var enemy_count_mult = active_original_wave_event.get("enemy_count", 1.0)
+	var captain_power = sum_all_player_effects(Keys.original_draft_captain_hash)
+	var extra_choices = max(0, active_original_wave_choice_pool_size - 3)
+	if captain_power > 0 and extra_choices > 0:
+		enemy_count_mult *= max(0.72, 1.0 - 0.08 * captain_power * extra_choices)
+	return enemy_count_mult
 
 
 func get_original_wave_event_tree_bonus() -> int:
@@ -546,6 +580,13 @@ func award_original_wave_event_rewards() -> void:
 		var reward = int(round(base_reward * (1.0 + reward_bonus) + streak_reward * (1.0 + streak_bonus)))
 		if reward > 0:
 			add_gold(reward, player_index)
+		var broker_power = get_player_effect(Keys.original_streak_broker_hash, player_index)
+		if broker_power > 0 and risk > 0:
+			add_stat(Keys.stat_luck_hash, risk * broker_power, player_index)
+		var gardener_power = get_player_effect(Keys.original_sun_gardener_hash, player_index)
+		var tree_bonus = get_original_wave_event_tree_bonus()
+		if gardener_power > 0 and tree_bonus > 0:
+			add_stat(Keys.stat_harvesting_hash, max(1, tree_bonus * gardener_power), player_index)
 	original_wave_clear_streak += 1
 
 
