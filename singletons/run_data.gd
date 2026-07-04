@@ -204,6 +204,7 @@ var active_original_wave_mutation: = {}
 var pending_original_wave_choices: = []
 var active_original_wave_choice_pool_size: = 0
 var original_wave_clear_streak: = 0
+var original_wave_rewards_awarded: = false
 var constant_projectile: = 1
 
 var current_living_enemies: = 0
@@ -375,6 +376,7 @@ func clear_original_wave_event() -> void:
 	active_original_wave_mutation.clear()
 	pending_original_wave_choices.clear()
 	active_original_wave_choice_pool_size = 0
+	original_wave_rewards_awarded = false
 
 
 func has_original_wave_event() -> bool:
@@ -569,6 +571,8 @@ func get_original_wave_event_tree_bonus() -> int:
 func award_original_wave_event_rewards() -> void:
 	if active_original_wave_event.empty():
 		return
+	if original_wave_rewards_awarded:
+		return
 
 	var mutation_reward_mult = active_original_wave_mutation.get("materials", 1.0)
 	var risk = get_active_original_wave_risk()
@@ -588,6 +592,7 @@ func award_original_wave_event_rewards() -> void:
 		if gardener_power > 0 and tree_bonus > 0:
 			add_stat(Keys.stat_harvesting_hash, max(1, tree_bonus * gardener_power), player_index)
 	original_wave_clear_streak += 1
+	original_wave_rewards_awarded = true
 
 
 func apply_original_wave_mutation_to_enemy(enemy) -> void:
@@ -845,7 +850,7 @@ func unlock_player_shop_item(item_data: ItemParentData, player_index: int) -> vo
 func reset(restart: bool = false) -> void :
 	current_run_accessibility_settings = ProgressData.settings.enemy_scaling.duplicate()
 	base_run_accessibility_settings = current_run_accessibility_settings.duplicate()
-	active_original_wave_event.clear()
+	clear_original_wave_event()
 	constant_projectile = ProgressData.settings.constant_projectile_option
 	is_ban_mode_active = ProgressData.settings.ban_mode_toggled
 
@@ -2106,7 +2111,13 @@ func get_state() -> Dictionary:
 		"current_zone": current_zone, 
 		"current_wave": current_wave, 
 		"current_difficulty": current_difficulty, 
+		"base_original_wave_accessibility_settings": base_run_accessibility_settings.duplicate(),
+		"active_original_wave_event": active_original_wave_event.duplicate(true),
+		"active_original_wave_mutation": active_original_wave_mutation.duplicate(true),
+		"pending_original_wave_choices": pending_original_wave_choices.duplicate(true),
+		"active_original_wave_choice_pool_size": active_original_wave_choice_pool_size,
 		"original_wave_clear_streak": original_wave_clear_streak, 
+		"original_wave_rewards_awarded": original_wave_rewards_awarded,
 		"bonus_gold": bonus_gold, 
 		"total_bonus_gold": total_bonus_gold, 
 		"retries": retries, 
@@ -2127,8 +2138,8 @@ func get_state() -> Dictionary:
 		"max_endless_wave_record_beaten": max_endless_wave_record_beaten, 
 		"is_endless_run": is_endless_run, 
 		"is_coop_run": is_coop_run, 
-		"play_mode": PlayMode.SOLO, 
-		"is_streamplay_run": false, 
+		"play_mode": play_mode,
+		"is_streamplay_run": is_streamplay_run,
 		"enabled_dlcs": enabled_dlcs, 
 
 		"tracked_item_effects": tracked_item_effects.duplicate(true)
@@ -2161,8 +2172,12 @@ func resume_from_state(state: Dictionary) -> void :
 	players_data = players_data_copy
 
 	current_run_accessibility_settings = state.enemy_scaling.duplicate()
-	base_run_accessibility_settings = current_run_accessibility_settings.duplicate()
-	active_original_wave_event.clear()
+	base_run_accessibility_settings = state.get("base_original_wave_accessibility_settings", current_run_accessibility_settings).duplicate()
+	active_original_wave_event = state.get("active_original_wave_event", {}).duplicate(true)
+	active_original_wave_mutation = state.get("active_original_wave_mutation", {}).duplicate(true)
+	pending_original_wave_choices = state.get("pending_original_wave_choices", []).duplicate(true)
+	active_original_wave_choice_pool_size = int(state.get("active_original_wave_choice_pool_size", 0))
+	original_wave_rewards_awarded = bool(state.get("original_wave_rewards_awarded", false))
 	if state.has("constant_projectile"):
 		constant_projectile = int(state.constant_projectile)
 

@@ -337,9 +337,6 @@ func reload_logo(screen: TitleScreenBackgroundData) -> void :
 
 func _on_StartButton_pressed() -> void :
 	MusicManager.tween( - 5)
-	RunData.play_mode = RunData.PlayMode.SOLO
-	RunData.set_coop_run(false)
-	RunData.set_player_count(1, true)
 	ProgressData.start_activity()
 	var _error = get_tree().change_scene(MenuData.character_selection_scene)
 
