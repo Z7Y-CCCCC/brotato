@@ -319,12 +319,11 @@ func _show_original_wave_choice_overlay(choices: Array) -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 	var choice_count = max(choices.size(), 1)
-	var panel_width = 940 if choice_count <= 3 else 1040
-	var card_width = 300
-	if choice_count == 4:
-		card_width = 240
-	elif choice_count >= 5:
-		card_width = 190
+	var viewport_width = get_viewport_rect().size.x
+	var panel_width = int(min(1180, max(760, viewport_width - 80)))
+	var card_gap = 14
+	var card_width = int((panel_width - card_gap * (choice_count - 1)) / choice_count)
+	card_width = int(clamp(card_width, 205, 310))
 
 	var overlay = Control.new()
 	overlay.name = "OriginalWaveChoiceOverlay"
@@ -344,9 +343,9 @@ func _show_original_wave_choice_overlay(choices: Array) -> void:
 	panel.anchor_right = 0.5
 	panel.anchor_bottom = 0.5
 	panel.margin_left = -panel_width / 2
-	panel.margin_top = -235
+	panel.margin_top = -255
 	panel.margin_right = panel_width / 2
-	panel.margin_bottom = 235
+	panel.margin_bottom = 255
 	panel.add_constant_override("separation", 18)
 	overlay.add_child(panel)
 
@@ -363,16 +362,43 @@ func _show_original_wave_choice_overlay(choices: Array) -> void:
 	panel.add_child(subtitle)
 
 	var cards = HBoxContainer.new()
-	cards.add_constant_override("separation", 18)
+	cards.add_constant_override("separation", card_gap)
 	panel.add_child(cards)
 
 	for i in choices.size():
 		var button = Button.new()
-		button.text = RunData.get_original_wave_choice_text(choices[i])
-		button.rect_min_size = Vector2(card_width, 320)
+		button.text = ""
+		button.rect_min_size = Vector2(card_width, 350)
 		button.focus_mode = Control.FOCUS_ALL
 		button.connect("pressed", self, "_on_original_wave_choice_pressed", [i])
 		cards.add_child(button)
+
+		var content = VBoxContainer.new()
+		content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		content.set_anchors_and_margins_preset(Control.PRESET_WIDE)
+		content.margin_left = 12
+		content.margin_top = 12
+		content.margin_right = -12
+		content.margin_bottom = -12
+		content.add_constant_override("separation", 10)
+		button.add_child(content)
+
+		var choice_title = Label.new()
+		choice_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		choice_title.align = Label.ALIGN_CENTER
+		choice_title.autowrap = true
+		choice_title.rect_min_size = Vector2(card_width - 24, 58)
+		choice_title.text = RunData.get_original_wave_choice_card_title(choices[i])
+		content.add_child(choice_title)
+
+		var choice_details = Label.new()
+		choice_details.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		choice_details.align = Label.ALIGN_LEFT
+		choice_details.autowrap = true
+		choice_details.rect_min_size = Vector2(card_width - 24, 250)
+		choice_details.text = RunData.get_original_wave_choice_card_details(choices[i])
+		content.add_child(choice_details)
+
 		if i == 0:
 			button.grab_focus()
 

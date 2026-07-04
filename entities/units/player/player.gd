@@ -979,6 +979,8 @@ func on_consumable_picked_up(consumable_data: ConsumableData) -> void :
 		if stat_changed:
 			LinkedStats.reset_player(player_index)
 
+	RunData.apply_original_character_consumable_rewards(consumable_data.my_id_hash, player_index, current_stats.health >= max_stats.health)
+
 	var player_data = RunData.players_data[player_index]
 	player_data.consumables_picked_up_this_run += 1
 	ChallengeService.try_complete_challenge(ChallengeService.chal_hungry_hash, player_data.consumables_picked_up_this_run)

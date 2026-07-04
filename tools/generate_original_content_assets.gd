@@ -10,6 +10,7 @@ const CHARACTER_SPECS := [
 		"colors": [Color(0.22, 0.62, 0.26), Color(0.92, 0.74, 0.28)],
 		"weapons": ["res://weapons/melee/wrench/1/wrench_data.tres", "res://weapons/melee/pruner/1/pruner_data.tres"],
 		"effects": [
+			{"file": "signature_effect.tres", "type": "default", "script": "res://effects/items/original_character_mechanic_effect.gd", "key": "original_lawn_engineer", "value": 1},
 			{"file": "engineering_effect.tres", "type": "default", "key": "stat_engineering", "value": 8},
 			{"file": "trees_effect.tres", "type": "default", "key": "trees", "value": 2},
 			{"file": "special_trees_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_trees_effect.gd", "key": "original_wave_event_trees", "value": 2},
@@ -24,6 +25,7 @@ const CHARACTER_SPECS := [
 		"colors": [Color(0.18, 0.48, 0.95), Color(1.0, 0.36, 0.18)],
 		"weapons": ["res://weapons/ranged/taser/1/taser_data.tres", "res://weapons/melee/lightning_shiv/1/lightning_shiv_data.tres"],
 		"effects": [
+			{"file": "signature_effect.tres", "type": "default", "script": "res://effects/items/original_character_mechanic_effect.gd", "key": "original_comet_runner", "value": 1},
 			{"file": "speed_effect.tres", "type": "default", "key": "stat_speed", "value": 12},
 			{"file": "pickup_range_effect.tres", "type": "default", "key": "pickup_range", "value": 30},
 			{"file": "event_chance_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_chance_effect.gd", "key": "original_wave_event_chance", "value": 15},
@@ -38,6 +40,7 @@ const CHARACTER_SPECS := [
 		"colors": [Color(0.2, 0.22, 0.58), Color(0.82, 0.72, 1.0)],
 		"weapons": ["res://weapons/ranged/wand/1/wand_data.tres", "res://weapons/ranged/slingshot/1/slingshot_data.tres"],
 		"effects": [
+			{"file": "signature_effect.tres", "type": "default", "script": "res://effects/items/original_character_mechanic_effect.gd", "key": "original_echo_librarian", "value": 1},
 			{"file": "luck_effect.tres", "type": "default", "key": "stat_luck", "value": 10},
 			{"file": "xp_effect.tres", "type": "default", "key": "xp_gain", "value": 10},
 			{"file": "event_reward_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_reward_effect.gd", "key": "original_wave_event_reward", "value": 35},

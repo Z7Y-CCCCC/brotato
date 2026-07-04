@@ -431,6 +431,48 @@ func get_original_wave_choice_text(choice: Dictionary) -> String:
 	]
 
 
+func get_original_wave_choice_card_title(choice: Dictionary) -> String:
+	var event = choice.get("event", {})
+	var mutation = choice.get("mutation", {})
+	if event.empty() or mutation.empty():
+		return "Special Wave"
+	return "%s\n%s" % [event.get("name", "Special Wave"), mutation.get("name", "Mutated")]
+
+
+func get_original_wave_choice_card_details(choice: Dictionary) -> String:
+	var event = choice.get("event", {})
+	var mutation = choice.get("mutation", {})
+	if event.empty() or mutation.empty():
+		return ""
+
+	var enemy_count = int(round(event.get("enemy_count", 1.0) * 100.0))
+	var map_size = int(round(event.get("map_size", 1.0) * 100.0))
+	var duration = int(round(event.get("duration", 1.0) * 100.0))
+	var materials = int(round(event.get("materials", 1.0) * mutation.get("materials", 1.0) * 100.0))
+	var risk = get_original_wave_choice_risk(choice)
+	var streak_preview = get_original_wave_streak_reward_preview(risk)
+
+	var stat_lines = []
+	for stat_bonus in event.get("player_stats", []):
+		var stat_value = int(stat_bonus.value)
+		var stat_prefix = "+" if stat_value >= 0 else ""
+		stat_lines.push_back("%s %s%s" % [tr(stat_bonus.stat.to_upper()), stat_prefix, str(stat_value)])
+
+	var stats_text = PoolStringArray(stat_lines).join("\n")
+	if stats_text == "":
+		stats_text = "No bonus stats"
+
+	return "RISK %s/5  MATERIALS %s%%\nStreak clear +%s\nEnemies %s%%  Map %s%%\nDuration %s%%\n\n%s" % [
+		str(risk),
+		str(materials),
+		str(streak_preview),
+		str(enemy_count),
+		str(map_size),
+		str(duration),
+		stats_text
+	]
+
+
 func get_original_wave_choice_risk(choice: Dictionary) -> int:
 	var event = choice.get("event", {})
 	var mutation = choice.get("mutation", {})
@@ -519,20 +561,42 @@ func apply_original_wave_event_player_stats(player_index: int) -> void:
 		emit_signal("stat_added", stat_hash, stat_value, 0.0, player_index)
 
 	var risk = get_active_original_wave_risk()
+	var tree_bonus = get_original_wave_event_tree_bonus()
+	var extra_choices = max(0, active_original_wave_choice_pool_size - 3)
+
+	var lawn_power = get_player_effect(Keys.original_lawn_engineer_hash, player_index)
+	if lawn_power > 0 and tree_bonus > 0:
+		_add_original_wave_temp_stat(Keys.stat_engineering_hash, tree_bonus * 3 * lawn_power, player_index)
+		_add_original_wave_temp_stat(Keys.stat_armor_hash, max(1, int(tree_bonus / 2)) * lawn_power, player_index)
+
+	var comet_power = get_player_effect(Keys.original_comet_runner_hash, player_index)
+	if comet_power > 0 and risk > 0:
+		_add_original_wave_temp_stat(Keys.stat_speed_hash, risk * 3 * comet_power, player_index)
+		_add_original_wave_temp_stat(Keys.stat_attack_speed_hash, risk * 2 * comet_power, player_index)
+		_add_original_wave_temp_stat(Keys.pickup_range_hash, risk * 12 * comet_power, player_index)
+
+	var echo_power = get_player_effect(Keys.original_echo_librarian_hash, player_index)
+	if echo_power > 0:
+		_add_original_wave_temp_stat(Keys.xp_gain_hash, (risk * 4 + extra_choices * 8) * echo_power, player_index)
+		_add_original_wave_temp_stat(Keys.stat_range_hash, (risk * 8 + extra_choices * 10) * echo_power, player_index)
+
+	var paper_power = get_player_effect(Keys.original_paper_samurai_hash, player_index)
+	if paper_power > 0 and risk > 0:
+		_add_original_wave_temp_stat(Keys.stat_crit_chance_hash, risk * 2 * paper_power, player_index)
+		_add_original_wave_temp_stat(Keys.stat_crit_damage_hash, risk * 10 * paper_power, player_index)
+		_add_original_wave_temp_stat(Keys.stat_armor_hash, -risk * paper_power, player_index)
+
 	var duelist_power = get_player_effect(Keys.original_mutation_duelist_hash, player_index)
 	if duelist_power > 0 and risk > 0:
 		_add_original_wave_temp_stat(Keys.stat_percent_damage_hash, risk * 4 * duelist_power, player_index)
 		_add_original_wave_temp_stat(Keys.stat_attack_speed_hash, risk * 3 * duelist_power, player_index)
 
 	var sun_power = get_player_effect(Keys.original_sun_gardener_hash, player_index)
-	if sun_power > 0:
-		var tree_bonus = get_original_wave_event_tree_bonus()
-		if tree_bonus > 0:
-			_add_original_wave_temp_stat(Keys.stat_hp_regeneration_hash, max(1, tree_bonus * sun_power), player_index)
-			_add_original_wave_temp_stat(Keys.stat_elemental_damage_hash, max(1, int(tree_bonus / 2) * sun_power), player_index)
+	if sun_power > 0 and tree_bonus > 0:
+		_add_original_wave_temp_stat(Keys.stat_hp_regeneration_hash, max(1, tree_bonus * sun_power), player_index)
+		_add_original_wave_temp_stat(Keys.stat_elemental_damage_hash, max(1, int(tree_bonus / 2) * sun_power), player_index)
 
 	var captain_power = get_player_effect(Keys.original_draft_captain_hash, player_index)
-	var extra_choices = max(0, active_original_wave_choice_pool_size - 3)
 	if captain_power > 0 and extra_choices > 0:
 		_add_original_wave_temp_stat(Keys.stat_range_hash, extra_choices * 12 * captain_power, player_index)
 		_add_original_wave_temp_stat(Keys.stat_armor_hash, extra_choices * captain_power, player_index)
@@ -591,8 +655,37 @@ func award_original_wave_event_rewards() -> void:
 		var tree_bonus = get_original_wave_event_tree_bonus()
 		if gardener_power > 0 and tree_bonus > 0:
 			add_stat(Keys.stat_harvesting_hash, max(1, tree_bonus * gardener_power), player_index)
+		var lawn_power = get_player_effect(Keys.original_lawn_engineer_hash, player_index)
+		if lawn_power > 0 and tree_bonus > 0:
+			add_stat(Keys.stat_engineering_hash, max(1, int(tree_bonus / 2)) * lawn_power, player_index)
+		var echo_power = get_player_effect(Keys.original_echo_librarian_hash, player_index)
+		if echo_power > 0:
+			add_xp(max(1, current_wave * (risk + 1) * echo_power), player_index)
+		var paper_power = get_player_effect(Keys.original_paper_samurai_hash, player_index)
+		if paper_power > 0 and risk >= 4:
+			add_stat(Keys.stat_crit_chance_hash, paper_power, player_index)
 	original_wave_clear_streak += 1
 	original_wave_rewards_awarded = true
+
+
+func apply_original_character_consumable_rewards(consumable_hash: int, player_index: int, was_at_max_health: bool) -> void:
+	if active_original_wave_event.empty():
+		return
+	if consumable_hash != Keys.consumable_fruit_hash and consumable_hash != Keys.consumable_poisoned_fruit_hash:
+		return
+
+	var orchard_power = get_player_effect(Keys.original_orchard_alchemist_hash, player_index)
+	if orchard_power > 0:
+		add_stat(Keys.stat_elemental_damage_hash, orchard_power, player_index)
+		add_stat(Keys.stat_luck_hash, orchard_power, player_index)
+		if was_at_max_health:
+			add_stat(Keys.stat_harvesting_hash, orchard_power, player_index)
+
+	var chef_power = get_player_effect(Keys.original_void_chef_hash, player_index)
+	if chef_power > 0:
+		add_gold(max(1, int(current_wave / 2)) * chef_power, player_index)
+		_add_original_wave_temp_stat(Keys.explosion_damage_hash, 8 * chef_power, player_index)
+		_add_original_wave_temp_stat(Keys.explosion_size_hash, 4 * chef_power, player_index)
 
 
 func apply_original_wave_mutation_to_enemy(enemy) -> void:

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=18 format=2]
+[gd_resource type="Resource" load_steps=19 format=2]
 
 [ext_resource path="res://items/characters/character_data.gd" type="Script" id=1]
 [ext_resource path="res://custom_elements/characters/paper_samurai/paper_samurai_icon_texture.tres" type="Texture" id=2]
@@ -17,6 +17,7 @@
 [ext_resource path="res://custom_elements/characters/paper_samurai/paper_samurai_blade_appearance.tres" type="Resource" id=15]
 [ext_resource path="res://custom_elements/characters/paper_samurai/paper_samurai_eyes_appearance.tres" type="Resource" id=16]
 [ext_resource path="res://custom_elements/characters/paper_samurai/paper_samurai_scarf_appearance.tres" type="Resource" id=17]
+[ext_resource path="res://custom_elements/characters/paper_samurai/signature_effect.tres" type="Resource" id=18]
 
 [resource]
 script = ExtResource( 1 )
@@ -27,7 +28,7 @@ icon = ExtResource( 2 )
 name = "Paper Samurai"
 tier = 0
 value = 1
-effects = [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ) ]
+effects = [ ExtResource( 18 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ) ]
 tracking_text = ""
 is_lockable = true
 unlock_codex_descr_after_get_it = 1
