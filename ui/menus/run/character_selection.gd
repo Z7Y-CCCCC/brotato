@@ -86,6 +86,7 @@ func _ready() -> void :
 func init_coop_service() -> void :
 
 	_init_play_mode_ui()
+	_reset_stale_play_mode_for_new_selection()
 
 	var _e = _coop_button.connect("coop_initialized", self, "_on_coop_initialized", [false])
 	_e = CoopService.connect("connected_players_updated", self, "_on_connected_players_updated", [false])
@@ -112,6 +113,15 @@ func init_coop_service() -> void :
 	_coop_button.init()
 	_run_options_panel.init()
 	CoopService.set_process_input(true)
+
+
+func _reset_stale_play_mode_for_new_selection() -> void:
+	if RunData.menu_selection_back:
+		return
+	if Utils.on_nintendo_nx_or_ounce:
+		return
+	RunData.play_mode = RunData.PlayMode.SOLO
+	RunData.set_coop_run(false)
 
 
 func _init_play_mode_ui() -> void :

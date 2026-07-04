@@ -819,6 +819,7 @@ func reset(restart: bool = false) -> void :
 
 	if not restart:
 		set_player_count(1, true)
+		play_mode = PlayMode.SOLO
 		set_coop_run(false)
 		is_endless_run = false
 		enabled_dlcs = ProgressData.get_active_dlc_ids()
