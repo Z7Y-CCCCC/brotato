@@ -11,5 +11,5 @@ func get_text(_player_index: int, _colored: bool = true) -> String:
 	return "%s%s%% special wave chance" % [prefix, str(value)]
 
 
-func get_icon(_player_index: int) -> Texture:
+func get_icon(_player_index: int):
 	return load("res://ui/icons/misc/elite_icon.png")

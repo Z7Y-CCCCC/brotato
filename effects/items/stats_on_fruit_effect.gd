@@ -36,7 +36,7 @@ func get_text(_player_index: int, _colored: bool = true) -> String:
 	return "%s%% chance to gain %s%s %s when eating fruit" % [str(chance), prefix, str(value), tr(stat.to_upper())]
 
 
-func get_icon(_player_index: int) -> Texture:
+func get_icon(_player_index: int):
 	return ItemService.get_stat_small_icon(stat_hash)
 
 

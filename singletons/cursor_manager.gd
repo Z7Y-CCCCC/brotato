@@ -24,6 +24,8 @@ func _process(_delta):
 func get_cursor_image() -> Resource:
 	var tree = get_tree()
 	var current_scene = tree.current_scene
+	if not is_instance_valid(current_scene):
+		return normal_image
 	var show_manual_cursor = (
 		current_scene.has_method("show_manual_cursor")
 		and current_scene.show_manual_cursor()

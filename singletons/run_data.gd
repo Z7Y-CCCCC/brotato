@@ -258,7 +258,7 @@ var play_mode = 0
 var enabled_dlcs = []
 var menu_selection_back: = false
 
-var wave_timer: WaveTimer = null
+var wave_timer = null
 
 func _ready() -> void :
 	if DebugService.unlock_all_challenges:
@@ -282,7 +282,7 @@ func set_coop_run(value: bool) -> void :
 		OS_Seaven.set_vsync_interval(2 if is_coop_run else 1)
 
 
-func on_wave_start(timer: WaveTimer) -> void :
+func on_wave_start(timer) -> void :
 	_reset_per_wave_properties()
 	clear_original_wave_event()
 	start_wave_state = get_state()
@@ -443,7 +443,7 @@ func get_active_original_wave_risk() -> int:
 
 func get_original_wave_streak_reward_preview(risk: int) -> int:
 	var next_streak = original_wave_clear_streak + 1
-	return max(0, current_wave * max(1, risk) * next_streak)
+	return int(max(0, current_wave * max(1, risk) * next_streak))
 
 
 func get_original_wave_event_material_mult() -> float:
