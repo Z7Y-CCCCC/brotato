@@ -319,7 +319,7 @@ func roll_original_wave_event() -> Dictionary:
 	return active_original_wave_event.duplicate()
 
 
-func roll_original_wave_event_choices(choice_count: int = 3) -> Array:
+func roll_original_wave_event_choices(choice_count: int = -1) -> Array:
 	clear_original_wave_event()
 	pending_original_wave_choices.clear()
 
@@ -330,6 +330,9 @@ func roll_original_wave_event_choices(choice_count: int = 3) -> Array:
 	var should_force_event = current_wave % 3 == 0
 	if not should_force_event and randf() > special_wave_chance:
 		return []
+
+	if choice_count < 0:
+		choice_count = get_original_wave_choice_count()
 
 	var used_choices = {}
 	var attempts = 0
@@ -344,6 +347,10 @@ func roll_original_wave_event_choices(choice_count: int = 3) -> Array:
 		pending_original_wave_choices.push_back({"event": event, "mutation": mutation})
 
 	return pending_original_wave_choices.duplicate(true)
+
+
+func get_original_wave_choice_count() -> int:
+	return int(clamp(3 + sum_all_player_effects(Keys.original_wave_choice_count_hash), 3, 5))
 
 
 func choose_original_wave_event(choice_index: int) -> Dictionary:

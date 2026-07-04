@@ -318,6 +318,14 @@ func _show_original_wave_choice_overlay(choices: Array) -> void:
 	_original_wave_choice_active = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
+	var choice_count = max(choices.size(), 1)
+	var panel_width = 940 if choice_count <= 3 else 1040
+	var card_width = 300
+	if choice_count == 4:
+		card_width = 240
+	elif choice_count >= 5:
+		card_width = 190
+
 	var overlay = Control.new()
 	overlay.name = "OriginalWaveChoiceOverlay"
 	overlay.pause_mode = Node.PAUSE_MODE_PROCESS
@@ -335,9 +343,9 @@ func _show_original_wave_choice_overlay(choices: Array) -> void:
 	panel.anchor_top = 0.5
 	panel.anchor_right = 0.5
 	panel.anchor_bottom = 0.5
-	panel.margin_left = -470
+	panel.margin_left = -panel_width / 2
 	panel.margin_top = -235
-	panel.margin_right = 470
+	panel.margin_right = panel_width / 2
 	panel.margin_bottom = 235
 	panel.add_constant_override("separation", 18)
 	overlay.add_child(panel)
@@ -345,13 +353,13 @@ func _show_original_wave_choice_overlay(choices: Array) -> void:
 	var title = Label.new()
 	title.align = Label.ALIGN_CENTER
 	title.text = "SPECIAL WAVE DRAFT"
-	title.rect_min_size = Vector2(940, 36)
+	title.rect_min_size = Vector2(panel_width, 36)
 	panel.add_child(title)
 
 	var subtitle = Label.new()
 	subtitle.align = Label.ALIGN_CENTER
 	subtitle.text = "Choose one rule for this wave. Higher risk and streaks pay more. Current streak: %s" % str(RunData.original_wave_clear_streak)
-	subtitle.rect_min_size = Vector2(940, 28)
+	subtitle.rect_min_size = Vector2(panel_width, 28)
 	panel.add_child(subtitle)
 
 	var cards = HBoxContainer.new()
@@ -361,7 +369,7 @@ func _show_original_wave_choice_overlay(choices: Array) -> void:
 	for i in choices.size():
 		var button = Button.new()
 		button.text = RunData.get_original_wave_choice_text(choices[i])
-		button.rect_min_size = Vector2(300, 320)
+		button.rect_min_size = Vector2(card_width, 320)
 		button.focus_mode = Control.FOCUS_ALL
 		button.connect("pressed", self, "_on_original_wave_choice_pressed", [i])
 		cards.add_child(button)

@@ -439,6 +439,7 @@ static func init_stats(all_null_values: bool = false) -> Dictionary:
 		Keys.original_wave_event_chance_hash: 0, 
 		Keys.original_wave_event_trees_hash: 0, 
 		Keys.original_wave_streak_reward_hash: 0, 
+		Keys.original_wave_choice_count_hash: 0, 
 		Keys.enemy_health_hash: 0, 
 		Keys.enemy_damage_hash: 0, 
 		Keys.enemy_speed_hash: 0, 

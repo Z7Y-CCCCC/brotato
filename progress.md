@@ -196,3 +196,8 @@ Original prompt: 这个是我的游戏项目，但是有很多bug，之前添加
   - Asset generation script: `Godot_v3.7-dev1_win64.exe --path ... -s res://tools/generate_original_content_assets.gd`.
   - Project parse/startup: `Godot_v3.7-dev1_win64.exe --path ... --quit --verbose`.
   - Temporary big-update validator loaded all nine new resources and checked draft risk/streak calculations, then was removed.
+
+### Draft Choice Count Polish
+- Added `original_wave_choice_count`, a new effect key that increases special-wave draft choices from the default 3 up to a capped 5.
+- Connected the effect to `Draft Captain` and `Risk Compass`, turning them into real draft-control build pieces instead of only chance/reward stat modifiers.
+- Updated the special-wave draft overlay so 4-choice and 5-choice drafts fit inside the panel without overflowing.

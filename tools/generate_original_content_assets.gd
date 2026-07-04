@@ -95,6 +95,7 @@ const CHARACTER_SPECS := [
 		"weapons": ["res://weapons/ranged/double_barrel_shotgun/1/double_barrel_shotgun_data.tres", "res://weapons/ranged/laser_gun/1/laser_gun_data.tres"],
 		"effects": [
 			{"file": "event_chance_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_chance_effect.gd", "key": "original_wave_event_chance", "value": 25},
+			{"file": "choice_count_effect.tres", "type": "default", "script": "res://effects/items/original_wave_choice_count_effect.gd", "key": "original_wave_choice_count", "value": 1},
 			{"file": "event_reward_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_reward_effect.gd", "key": "original_wave_event_reward", "value": 25},
 			{"file": "special_armor_effect.tres", "type": "event_stat", "stat": "stat_armor", "value": 3},
 			{"file": "special_range_effect.tres", "type": "event_stat", "stat": "stat_range", "value": 35},
@@ -167,6 +168,7 @@ const ITEM_SPECS := [
 		"tags": ["exploration", "stat_speed", "economy"],
 		"effects": [
 			{"file": "event_chance_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_chance_effect.gd", "key": "original_wave_event_chance", "value": 10},
+			{"file": "choice_count_effect.tres", "type": "default", "script": "res://effects/items/original_wave_choice_count_effect.gd", "key": "original_wave_choice_count", "value": 1},
 			{"file": "event_reward_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_reward_effect.gd", "key": "original_wave_event_reward", "value": 12},
 			{"file": "speed_effect.tres", "type": "default", "key": "stat_speed", "value": 4}
 		]
