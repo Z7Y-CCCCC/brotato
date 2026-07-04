@@ -155,3 +155,44 @@ Original prompt: 这个是我的游戏项目，但是有很多bug，之前添加
 - Validation passed:
   - Project parse/startup: `Godot_v3.7-dev1_win64.exe --path ... --quit --verbose`.
   - Temporary wave draft script dynamically loaded `RunData`, generated three choices, selected one, checked active event state and enemy-count multiplier, then was removed.
+
+## 2026-07-04 Special Wave Risk & Streak Expansion
+
+- Upgraded special-wave draft into a risk/reward system.
+- Each draft card now shows `RISK 1-5`.
+- Clearing special waves now builds a special-wave streak.
+- Streak rewards scale with current wave, card risk, and current streak.
+- Added `original_wave_streak_reward` as a new stat/effect so characters and items can specialize in streak payouts.
+- Special-wave streak is serialized into run state so continuing a run preserves the system.
+- Added eight new original wave events:
+  - `Sunforge Noon`
+  - `Conveyor Panic`
+  - `Graveyard Shift`
+  - `Clone Parade`
+  - `Storm Market`
+  - `Tiny Planet`
+  - `Archive Overflow`
+  - `Blackout Bloom`
+- Added six new enemy mutations:
+  - `Splitting`
+  - `Ironclad`
+  - `Volatile`
+  - `Royal`
+  - `Hollow`
+  - `Verdant`
+- Added four unlocked original characters:
+  - `Streak Broker`: economy specialist built around high-risk cards and streak payouts.
+  - `Sun Gardener`: tree/fruit special-wave character with strong harvesting spikes.
+  - `Mutation Duelist`: high-pressure combat character that gains damage during special waves.
+  - `Draft Captain`: draft-focused ranged character that makes special waves more common and more profitable.
+- Added five unlocked original items:
+  - `Streak Ledger`
+  - `Risk Compass`
+  - `Sunforge Battery`
+  - `Clone Stamp`
+  - `Blackout Sprout`
+- Expanded `tools/generate_original_content_assets.gd` so future original character/item packs can be generated consistently.
+- Validation passed:
+  - Asset generation script: `Godot_v3.7-dev1_win64.exe --path ... -s res://tools/generate_original_content_assets.gd`.
+  - Project parse/startup: `Godot_v3.7-dev1_win64.exe --path ... --quit --verbose`.
+  - Temporary big-update validator loaded all nine new resources and checked draft risk/streak calculations, then was removed.

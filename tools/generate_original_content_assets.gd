@@ -45,6 +45,62 @@ const CHARACTER_SPECS := [
 			{"file": "enemy_health_tradeoff_effect.tres", "type": "default", "key": "enemy_health", "value": 12, "sign": 1}
 		],
 		"wanted_tags": ["stat_luck", "stat_range", "economy"]
+	},
+	{
+		"id": "streak_broker",
+		"name": "Streak Broker",
+		"colors": [Color(0.75, 0.46, 0.14), Color(1.0, 0.88, 0.3)],
+		"weapons": ["res://weapons/ranged/pistol/1/pistol_data.tres", "res://weapons/melee/scissors/1/scissors_data.tres"],
+		"effects": [
+			{"file": "luck_effect.tres", "type": "default", "key": "stat_luck", "value": 12},
+			{"file": "event_chance_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_chance_effect.gd", "key": "original_wave_event_chance", "value": 20},
+			{"file": "streak_reward_effect.tres", "type": "default", "script": "res://effects/items/original_wave_streak_reward_effect.gd", "key": "original_wave_streak_reward", "value": 60},
+			{"file": "event_reward_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_reward_effect.gd", "key": "original_wave_event_reward", "value": 20},
+			{"file": "enemy_damage_tradeoff_effect.tres", "type": "default", "key": "enemy_damage", "value": 10, "sign": 1}
+		],
+		"wanted_tags": ["economy", "stat_luck", "exploration"]
+	},
+	{
+		"id": "sun_gardener",
+		"name": "Sun Gardener",
+		"colors": [Color(0.94, 0.62, 0.14), Color(0.22, 0.72, 0.28)],
+		"weapons": ["res://weapons/melee/pruner/1/pruner_data.tres", "res://weapons/melee/stick/1/stick_data.tres"],
+		"effects": [
+			{"file": "trees_effect.tres", "type": "default", "key": "trees", "value": 4},
+			{"file": "special_trees_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_trees_effect.gd", "key": "original_wave_event_trees", "value": 3},
+			{"file": "enemy_fruit_drops_effect.tres", "type": "default", "key": "enemy_fruit_drops", "value": 12},
+			{"file": "special_harvesting_effect.tres", "type": "event_stat", "stat": "stat_harvesting", "value": 18},
+			{"file": "speed_tradeoff_effect.tres", "type": "default", "key": "stat_speed", "value": -6}
+		],
+		"wanted_tags": ["stat_harvesting", "exploration", "stat_luck"]
+	},
+	{
+		"id": "mutation_duelist",
+		"name": "Mutation Duelist",
+		"colors": [Color(0.72, 0.12, 0.16), Color(0.88, 0.9, 1.0)],
+		"weapons": ["res://weapons/melee/spear/1/spear_data.tres", "res://weapons/ranged/taser/1/taser_data.tres"],
+		"effects": [
+			{"file": "damage_effect.tres", "type": "default", "key": "stat_percent_damage", "value": 8},
+			{"file": "special_damage_effect.tres", "type": "event_stat", "stat": "stat_percent_damage", "value": 16},
+			{"file": "special_attack_speed_effect.tres", "type": "event_stat", "stat": "stat_attack_speed", "value": 10},
+			{"file": "event_chance_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_chance_effect.gd", "key": "original_wave_event_chance", "value": 12},
+			{"file": "enemy_speed_tradeoff_effect.tres", "type": "default", "key": "enemy_speed", "value": 10, "sign": 1}
+		],
+		"wanted_tags": ["damage", "stat_attack_speed", "stat_speed"]
+	},
+	{
+		"id": "draft_captain",
+		"name": "Draft Captain",
+		"colors": [Color(0.16, 0.38, 0.78), Color(0.95, 0.86, 0.45)],
+		"weapons": ["res://weapons/ranged/double_barrel_shotgun/1/double_barrel_shotgun_data.tres", "res://weapons/ranged/laser_gun/1/laser_gun_data.tres"],
+		"effects": [
+			{"file": "event_chance_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_chance_effect.gd", "key": "original_wave_event_chance", "value": 25},
+			{"file": "event_reward_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_reward_effect.gd", "key": "original_wave_event_reward", "value": 25},
+			{"file": "special_armor_effect.tres", "type": "event_stat", "stat": "stat_armor", "value": 3},
+			{"file": "special_range_effect.tres", "type": "event_stat", "stat": "stat_range", "value": 35},
+			{"file": "number_enemies_tradeoff_effect.tres", "type": "default", "key": "number_of_enemies", "value": 12, "sign": 1}
+		],
+		"wanted_tags": ["stat_range", "economy", "stat_armor"]
 	}
 ]
 
@@ -87,6 +143,71 @@ const ITEM_SPECS := [
 			{"file": "luck_effect.tres", "type": "default", "key": "stat_luck", "value": 6},
 			{"file": "event_reward_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_reward_effect.gd", "key": "original_wave_event_reward", "value": 15},
 			{"file": "special_range_effect.tres", "type": "event_stat", "stat": "stat_range", "value": 12}
+		]
+	},
+	{
+		"id": "streak_ledger",
+		"name": "Streak Ledger",
+		"tier": 2,
+		"value": 82,
+		"colors": [Color(0.76, 0.5, 0.16), Color(1.0, 0.9, 0.36)],
+		"tags": ["economy", "stat_luck", "exploration"],
+		"effects": [
+			{"file": "streak_reward_effect.tres", "type": "default", "script": "res://effects/items/original_wave_streak_reward_effect.gd", "key": "original_wave_streak_reward", "value": 45},
+			{"file": "event_chance_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_chance_effect.gd", "key": "original_wave_event_chance", "value": 8},
+			{"file": "luck_effect.tres", "type": "default", "key": "stat_luck", "value": 5}
+		]
+	},
+	{
+		"id": "risk_compass",
+		"name": "Risk Compass",
+		"tier": 1,
+		"value": 58,
+		"colors": [Color(0.18, 0.42, 0.78), Color(0.95, 0.75, 0.24)],
+		"tags": ["exploration", "stat_speed", "economy"],
+		"effects": [
+			{"file": "event_chance_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_chance_effect.gd", "key": "original_wave_event_chance", "value": 10},
+			{"file": "event_reward_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_reward_effect.gd", "key": "original_wave_event_reward", "value": 12},
+			{"file": "speed_effect.tres", "type": "default", "key": "stat_speed", "value": 4}
+		]
+	},
+	{
+		"id": "sunforge_battery",
+		"name": "Sunforge Battery",
+		"tier": 2,
+		"value": 76,
+		"colors": [Color(0.9, 0.36, 0.1), Color(1.0, 0.82, 0.22)],
+		"tags": ["damage", "stat_elemental_damage", "stat_attack_speed"],
+		"effects": [
+			{"file": "special_elemental_effect.tres", "type": "event_stat", "stat": "stat_elemental_damage", "value": 8},
+			{"file": "special_attack_speed_effect.tres", "type": "event_stat", "stat": "stat_attack_speed", "value": 8},
+			{"file": "enemy_speed_tradeoff_effect.tres", "type": "default", "key": "enemy_speed", "value": 4, "sign": 1}
+		]
+	},
+	{
+		"id": "clone_stamp",
+		"name": "Clone Stamp",
+		"tier": 1,
+		"value": 46,
+		"colors": [Color(0.28, 0.7, 0.86), Color(0.86, 0.94, 1.0)],
+		"tags": ["economy", "stat_crit_chance", "damage"],
+		"effects": [
+			{"file": "number_enemies_effect.tres", "type": "default", "key": "number_of_enemies", "value": 8, "sign": 1},
+			{"file": "event_reward_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_reward_effect.gd", "key": "original_wave_event_reward", "value": 18},
+			{"file": "special_crit_effect.tres", "type": "event_stat", "stat": "stat_crit_chance", "value": 7}
+		]
+	},
+	{
+		"id": "blackout_sprout",
+		"name": "Blackout Sprout",
+		"tier": 2,
+		"value": 72,
+		"colors": [Color(0.12, 0.44, 0.22), Color(0.44, 1.0, 0.42)],
+		"tags": ["exploration", "stat_engineering", "stat_harvesting"],
+		"effects": [
+			{"file": "special_trees_effect.tres", "type": "default", "script": "res://effects/items/original_wave_event_trees_effect.gd", "key": "original_wave_event_trees", "value": 2},
+			{"file": "special_engineering_effect.tres", "type": "event_stat", "stat": "stat_engineering", "value": 6},
+			{"file": "harvesting_effect.tres", "type": "default", "key": "stat_harvesting", "value": 6}
 		]
 	}
 ]

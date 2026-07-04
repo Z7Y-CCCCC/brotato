@@ -234,6 +234,7 @@ var original_wave_event_reward_hash: = generate_hash("original_wave_event_reward
 var original_wave_event_chance_hash: = generate_hash("original_wave_event_chance")
 var original_wave_event_stats_hash: = generate_hash("original_wave_event_stats")
 var original_wave_event_trees_hash: = generate_hash("original_wave_event_trees")
+var original_wave_streak_reward_hash: = generate_hash("original_wave_streak_reward")
 var boss_strength_hash: = generate_hash("boss_strength")
 var damage_against_bosses_hash: = generate_hash("damage_against_bosses")
 var reroll_price_hash: = generate_hash("reroll_price")

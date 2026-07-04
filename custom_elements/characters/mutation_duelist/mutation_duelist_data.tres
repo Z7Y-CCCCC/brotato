@@ -1,0 +1,40 @@
+[gd_resource type="Resource" load_steps=14 format=2]
+
+[ext_resource path="res://items/characters/character_data.gd" type="Script" id=1]
+[ext_resource path="res://custom_elements/characters/mutation_duelist/mutation_duelist_icon_texture.tres" type="Texture" id=2]
+[ext_resource path="res://custom_elements/characters/mutation_duelist/damage_effect.tres" type="Resource" id=3]
+[ext_resource path="res://custom_elements/characters/mutation_duelist/special_damage_effect.tres" type="Resource" id=4]
+[ext_resource path="res://custom_elements/characters/mutation_duelist/special_attack_speed_effect.tres" type="Resource" id=5]
+[ext_resource path="res://custom_elements/characters/mutation_duelist/event_chance_effect.tres" type="Resource" id=6]
+[ext_resource path="res://custom_elements/characters/mutation_duelist/enemy_speed_tradeoff_effect.tres" type="Resource" id=7]
+[ext_resource path="res://weapons/melee/spear/1/spear_data.tres" type="Resource" id=8]
+[ext_resource path="res://weapons/ranged/taser/1/taser_data.tres" type="Resource" id=9]
+[ext_resource path="res://custom_elements/characters/mutation_duelist/mutation_duelist_body_appearance.tres" type="Resource" id=10]
+[ext_resource path="res://custom_elements/characters/mutation_duelist/mutation_duelist_accessory_appearance.tres" type="Resource" id=11]
+[ext_resource path="res://custom_elements/characters/mutation_duelist/mutation_duelist_eyes_appearance.tres" type="Resource" id=12]
+[ext_resource path="res://custom_elements/characters/mutation_duelist/mutation_duelist_mouth_appearance.tres" type="Resource" id=13]
+
+[resource]
+script = ExtResource( 1 )
+my_id = "character_mutation_duelist"
+unlocked_by_default = true
+can_be_looted = true
+icon = ExtResource( 2 )
+name = "Mutation Duelist"
+tier = 0
+value = 1
+effects = [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ) ]
+tracking_text = ""
+is_lockable = true
+unlock_codex_descr_after_get_it = 1
+is_cursed = false
+curse_factor = 0.0
+max_nb = -1
+item_appearances = [ ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ) ]
+tags = [  ]
+wanted_tags = [ "damage", "stat_attack_speed", "stat_speed" ]
+banned_item_groups = [  ]
+banned_items = [  ]
+banned_upgrades = [  ]
+starting_weapons = [ ExtResource( 8 ), ExtResource( 9 ) ]
+starting_items = [  ]

@@ -350,7 +350,7 @@ func _show_original_wave_choice_overlay(choices: Array) -> void:
 
 	var subtitle = Label.new()
 	subtitle.align = Label.ALIGN_CENTER
-	subtitle.text = "Choose one rule for this wave. Higher risk means richer tempo."
+	subtitle.text = "Choose one rule for this wave. Higher risk and streaks pay more. Current streak: %s" % str(RunData.original_wave_clear_streak)
 	subtitle.rect_min_size = Vector2(940, 28)
 	panel.add_child(subtitle)
 

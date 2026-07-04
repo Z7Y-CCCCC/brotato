@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=6 format=2]
+
+[ext_resource path="res://custom_elements/items/blackout_sprout/blackout_sprout_icon_texture.tres" type="Texture" id=1]
+[ext_resource path="res://items/global/item_data.gd" type="Script" id=2]
+[ext_resource path="res://custom_elements/items/blackout_sprout/special_trees_effect.tres" type="Resource" id=3]
+[ext_resource path="res://custom_elements/items/blackout_sprout/special_engineering_effect.tres" type="Resource" id=4]
+[ext_resource path="res://custom_elements/items/blackout_sprout/harvesting_effect.tres" type="Resource" id=5]
+
+[resource]
+script = ExtResource( 2 )
+my_id = "item_blackout_sprout"
+unlocked_by_default = true
+can_be_looted = true
+icon = ExtResource( 1 )
+name = "Blackout Sprout"
+tier = 2
+value = 72
+effects = [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ) ]
+tracking_text = ""
+is_lockable = true
+unlock_codex_descr_after_get_it = 1
+is_cursed = false
+curse_factor = 0.0
+max_nb = -1
+item_appearances = [  ]
+tags = [ "exploration", "stat_engineering", "stat_harvesting" ]

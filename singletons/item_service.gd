@@ -102,6 +102,10 @@ func _ready() -> void :
 		_register_custom_resource(characters, ProgressData.characters_unlocked, "res://custom_elements/characters/lawn_engineer/lawn_engineer_data.tres")
 		_register_custom_resource(characters, ProgressData.characters_unlocked, "res://custom_elements/characters/comet_runner/comet_runner_data.tres")
 		_register_custom_resource(characters, ProgressData.characters_unlocked, "res://custom_elements/characters/echo_librarian/echo_librarian_data.tres")
+		_register_custom_resource(characters, ProgressData.characters_unlocked, "res://custom_elements/characters/streak_broker/streak_broker_data.tres")
+		_register_custom_resource(characters, ProgressData.characters_unlocked, "res://custom_elements/characters/sun_gardener/sun_gardener_data.tres")
+		_register_custom_resource(characters, ProgressData.characters_unlocked, "res://custom_elements/characters/mutation_duelist/mutation_duelist_data.tres")
+		_register_custom_resource(characters, ProgressData.characters_unlocked, "res://custom_elements/characters/draft_captain/draft_captain_data.tres")
 		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/antigravity_device/antigravity_device_data.tres")
 		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/event_contract/event_contract_data.tres")
 		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/void_marinade/void_marinade_data.tres")
@@ -111,6 +115,11 @@ func _ready() -> void :
 		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/seed_vault/seed_vault_data.tres")
 		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/meteor_coupon/meteor_coupon_data.tres")
 		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/echo_bookmark/echo_bookmark_data.tres")
+		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/streak_ledger/streak_ledger_data.tres")
+		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/risk_compass/risk_compass_data.tres")
+		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/sunforge_battery/sunforge_battery_data.tres")
+		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/clone_stamp/clone_stamp_data.tres")
+		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/blackout_sprout/blackout_sprout_data.tres")
 
 	Utils.reset_stat_keys()
 

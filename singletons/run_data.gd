@@ -168,6 +168,14 @@ const ORIGINAL_WAVE_EVENTS = [
 	{"id": "tax_season", "name": "Tax Season", "health": 1.2, "damage": 1.05, "speed": 0.96, "materials": 1.42, "reward": 7, "map_size": 1.0, "duration": 1.0, "enemy_count": 0.92, "player_stats": [{"stat": "stat_luck", "value": 8}]},
 	{"id": "meteor_night", "name": "Meteor Night", "health": 0.88, "damage": 1.25, "speed": 1.18, "materials": 1.22, "reward": 6, "map_size": 1.12, "duration": 0.75, "enemy_count": 1.08, "player_stats": [{"stat": "stat_attack_speed", "value": 10}, {"stat": "stat_speed", "value": 5}]},
 	{"id": "library_lockdown", "name": "Library Lockdown", "health": 1.16, "damage": 1.08, "speed": 0.88, "materials": 1.3, "reward": 6, "map_size": 0.9, "duration": 1.12, "enemy_count": 0.86, "player_stats": [{"stat": "stat_range", "value": 25}, {"stat": "stat_elemental_damage", "value": 3}]},
+	{"id": "sunforge_noon", "name": "Sunforge Noon", "health": 1.05, "damage": 1.14, "speed": 1.08, "materials": 1.34, "reward": 7, "risk": 3, "map_size": 1.08, "duration": 0.88, "enemy_count": 1.12, "trees": 2, "player_stats": [{"stat": "stat_elemental_damage", "value": 6}, {"stat": "stat_harvesting", "value": 10}]},
+	{"id": "conveyor_panic", "name": "Conveyor Panic", "health": 0.92, "damage": 1.18, "speed": 1.24, "materials": 1.32, "reward": 7, "risk": 4, "map_size": 0.86, "duration": 0.82, "enemy_count": 1.35, "player_stats": [{"stat": "stat_attack_speed", "value": 14}, {"stat": "stat_range", "value": 30}]},
+	{"id": "graveyard_shift", "name": "Graveyard Shift", "health": 1.32, "damage": 1.08, "speed": 0.86, "materials": 1.48, "reward": 8, "risk": 3, "map_size": 1.16, "duration": 1.15, "enemy_count": 0.94, "player_stats": [{"stat": "stat_lifesteal", "value": 4}, {"stat": "stat_armor", "value": 2}]},
+	{"id": "clone_parade", "name": "Clone Parade", "health": 0.76, "damage": 1.1, "speed": 1.12, "materials": 1.4, "reward": 8, "risk": 4, "map_size": 0.95, "duration": 1.0, "enemy_count": 1.5, "player_stats": [{"stat": "stat_crit_chance", "value": 8}, {"stat": "stat_percent_damage", "value": 6}]},
+	{"id": "storm_market", "name": "Storm Market", "health": 1.02, "damage": 1.16, "speed": 1.16, "materials": 1.55, "reward": 9, "risk": 5, "map_size": 1.0, "duration": 0.86, "enemy_count": 1.18, "player_stats": [{"stat": "stat_luck", "value": 15}, {"stat": "stat_speed", "value": 6}]},
+	{"id": "tiny_planet", "name": "Tiny Planet", "health": 1.08, "damage": 1.14, "speed": 1.08, "materials": 1.42, "reward": 8, "risk": 4, "map_size": 0.68, "duration": 0.96, "enemy_count": 1.28, "player_stats": [{"stat": "stat_dodge", "value": 8}, {"stat": "stat_melee_damage", "value": 4}]},
+	{"id": "archive_overflow", "name": "Archive Overflow", "health": 1.18, "damage": 1.1, "speed": 0.92, "materials": 1.38, "reward": 7, "risk": 3, "map_size": 1.0, "duration": 1.05, "enemy_count": 1.0, "player_stats": [{"stat": "stat_range", "value": 35}, {"stat": "stat_ranged_damage", "value": 4}]},
+	{"id": "blackout_bloom", "name": "Blackout Bloom", "health": 0.96, "damage": 1.24, "speed": 1.2, "materials": 1.46, "reward": 9, "risk": 5, "map_size": 1.18, "duration": 0.8, "enemy_count": 1.22, "trees": 4, "player_stats": [{"stat": "stat_engineering", "value": 8}, {"stat": "stat_speed", "value": 8}]},
 ]
 
 const ORIGINAL_WAVE_MUTATIONS = [
@@ -181,6 +189,12 @@ const ORIGINAL_WAVE_MUTATIONS = [
 	{"id": "glass_cannon", "name": "Glass Cannon", "health_pct": -35, "damage_pct": 36, "speed_pct": 10, "materials": 1.18, "scale": 0.94, "color": [0.9, 0.95, 1.0]},
 	{"id": "collector", "name": "Collector", "health_pct": 18, "damage_pct": 8, "speed_pct": -2, "materials": 1.45, "scale": 1.02, "color": [1.0, 0.88, 0.42]},
 	{"id": "sprinter", "name": "Sprinter", "health_pct": -10, "damage_pct": 8, "speed_pct": 38, "materials": 1.2, "scale": 0.88, "color": [0.3, 0.75, 1.0]},
+	{"id": "splitting", "name": "Splitting", "health_pct": -18, "damage_pct": 12, "speed_pct": 22, "materials": 1.32, "risk": 4, "scale": 0.9, "color": [0.72, 1.0, 0.66]},
+	{"id": "ironclad", "name": "Ironclad", "health_pct": 72, "damage_pct": 18, "speed_pct": -26, "materials": 1.38, "risk": 4, "scale": 1.22, "color": [0.58, 0.6, 0.64]},
+	{"id": "volatile", "name": "Volatile", "health_pct": -5, "damage_pct": 42, "speed_pct": 18, "materials": 1.42, "risk": 5, "scale": 1.04, "color": [1.0, 0.42, 0.12]},
+	{"id": "royal", "name": "Royal", "health_pct": 28, "damage_pct": 18, "speed_pct": 8, "materials": 1.65, "risk": 5, "scale": 1.12, "color": [0.95, 0.55, 1.0]},
+	{"id": "hollow", "name": "Hollow", "health_pct": -42, "damage_pct": 24, "speed_pct": 30, "materials": 1.3, "risk": 4, "scale": 0.82, "color": [0.48, 0.48, 0.58]},
+	{"id": "verdant", "name": "Verdant", "health_pct": 24, "damage_pct": 4, "speed_pct": 4, "materials": 1.3, "risk": 3, "scale": 1.04, "color": [0.22, 0.84, 0.36]},
 ]
 
 var current_run_accessibility_settings: Dictionary
@@ -188,6 +202,7 @@ var base_run_accessibility_settings: = {}
 var active_original_wave_event: = {}
 var active_original_wave_mutation: = {}
 var pending_original_wave_choices: = []
+var original_wave_clear_streak: = 0
 var constant_projectile: = 1
 
 var current_living_enemies: = 0
@@ -382,6 +397,8 @@ func get_original_wave_choice_text(choice: Dictionary) -> String:
 	var map_size = int(round(event.get("map_size", 1.0) * 100.0))
 	var duration = int(round(event.get("duration", 1.0) * 100.0))
 	var materials = int(round(event.get("materials", 1.0) * mutation.get("materials", 1.0) * 100.0))
+	var risk = get_original_wave_choice_risk(choice)
+	var streak_preview = get_original_wave_streak_reward_preview(risk)
 
 	var stat_lines = []
 	for stat_bonus in event.get("player_stats", []):
@@ -389,15 +406,37 @@ func get_original_wave_choice_text(choice: Dictionary) -> String:
 		var stat_prefix = "+" if stat_value >= 0 else ""
 		stat_lines.push_back("%s %s%s" % [tr(stat_bonus.stat.to_upper()), stat_prefix, str(stat_value)])
 
-	return "%s\n%s\n\nMaterials %s%%\nEnemies %s%%  Map %s%%\nDuration %s%%\n%s" % [
+	return "%s\n%s\nRISK %s / 5\n\nMaterials %s%%\nStreak bonus +%s\nEnemies %s%%  Map %s%%\nDuration %s%%\n%s" % [
 		event.get("name", "Special Wave"),
 		mutation.get("name", "Mutated"),
+		str(risk),
 		str(materials),
+		str(streak_preview),
 		str(enemy_count),
 		str(map_size),
 		str(duration),
 		PoolStringArray(stat_lines).join("\n")
 	]
+
+
+func get_original_wave_choice_risk(choice: Dictionary) -> int:
+	var event = choice.get("event", {})
+	var mutation = choice.get("mutation", {})
+	var base_risk = int(event.get("risk", 2))
+	var mutation_risk = int(mutation.get("risk", 2))
+	return int(clamp(base_risk + mutation_risk - 1, 1, 5))
+
+
+func get_active_original_wave_risk() -> int:
+	if active_original_wave_event.empty() or active_original_wave_mutation.empty():
+		return 0
+
+	return get_original_wave_choice_risk({"event": active_original_wave_event, "mutation": active_original_wave_mutation})
+
+
+func get_original_wave_streak_reward_preview(risk: int) -> int:
+	var next_streak = original_wave_clear_streak + 1
+	return max(0, current_wave * max(1, risk) * next_streak)
 
 
 func get_original_wave_event_material_mult() -> float:
@@ -440,6 +479,22 @@ func get_original_wave_event_gradient_color(fallback: Color) -> Color:
 			return Color(0.74, 0.24, 0.16)
 		"library_lockdown":
 			return Color(0.22, 0.24, 0.58)
+		"sunforge_noon":
+			return Color(0.92, 0.54, 0.16)
+		"conveyor_panic":
+			return Color(0.78, 0.18, 0.12)
+		"graveyard_shift":
+			return Color(0.18, 0.28, 0.24)
+		"clone_parade":
+			return Color(0.38, 0.72, 0.86)
+		"storm_market":
+			return Color(0.88, 0.66, 0.18)
+		"tiny_planet":
+			return Color(0.54, 0.2, 0.22)
+		"archive_overflow":
+			return Color(0.26, 0.28, 0.7)
+		"blackout_bloom":
+			return Color(0.18, 0.62, 0.34)
 		_:
 			return fallback
 
@@ -475,12 +530,16 @@ func award_original_wave_event_rewards() -> void:
 		return
 
 	var mutation_reward_mult = active_original_wave_mutation.get("materials", 1.0)
+	var risk = get_active_original_wave_risk()
+	var streak_reward = get_original_wave_streak_reward_preview(risk)
 	var base_reward = int(max(1, current_wave * active_original_wave_event.get("reward", 0) * mutation_reward_mult))
 	for player_index in get_player_count():
 		var reward_bonus = get_player_effect(Keys.original_wave_event_reward_hash, player_index) / 100.0
-		var reward = int(round(base_reward * (1.0 + reward_bonus)))
+		var streak_bonus = get_player_effect(Keys.original_wave_streak_reward_hash, player_index) / 100.0
+		var reward = int(round(base_reward * (1.0 + reward_bonus) + streak_reward * (1.0 + streak_bonus)))
 		if reward > 0:
 			add_gold(reward, player_index)
+	original_wave_clear_streak += 1
 
 
 func apply_original_wave_mutation_to_enemy(enemy) -> void:
@@ -539,6 +598,7 @@ func reset_players_data_stats_and_effects() -> void :
 func set_player_count(count: int, reset: = false) -> void :
 	if reset:
 		players_data.clear()
+		original_wave_clear_streak = 0
 	while players_data.size() < count:
 		var player_data: PlayerRunData = PlayerRunData.new()
 		player_data.gold = DebugService.starting_gold
@@ -1997,6 +2057,7 @@ func get_state() -> Dictionary:
 		"current_zone": current_zone, 
 		"current_wave": current_wave, 
 		"current_difficulty": current_difficulty, 
+		"original_wave_clear_streak": original_wave_clear_streak, 
 		"bonus_gold": bonus_gold, 
 		"total_bonus_gold": total_bonus_gold, 
 		"retries": retries, 
@@ -2061,6 +2122,7 @@ func resume_from_state(state: Dictionary) -> void :
 	current_zone = state.current_zone
 	current_wave = state.current_wave
 	current_difficulty = state.current_difficulty
+	original_wave_clear_streak = int(state.get("original_wave_clear_streak", 0))
 	bonus_gold = state.bonus_gold
 	total_bonus_gold = state.total_bonus_gold if "total_bonus_gold" in state else 0
 
