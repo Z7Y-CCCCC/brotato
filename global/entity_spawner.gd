@@ -171,7 +171,8 @@ func on_group_spawn_timing_reached(group_data: WaveGroupData) -> void :
 	var units_data = group_data.wave_units_data
 	var coop_factor = (RunData.get_player_count() - 1) * CoopService.additional_enemies_per_coop_player
 	var enemy_modifier = (RunData.sum_all_player_effects(Keys.number_of_enemies_hash) / 100.0)
-	var tree_modifier = RunData.sum_all_player_effects(Keys.trees_hash)
+	var special_wave_enemy_modifier = RunData.get_original_wave_event_enemy_count_mult()
+	var tree_modifier = RunData.sum_all_player_effects(Keys.trees_hash) + RunData.get_original_wave_event_tree_bonus()
 
 	for unit_wave_data in units_data:
 		var number: float = Utils.randi_range(unit_wave_data.min_number, unit_wave_data.max_number) as float
@@ -180,6 +181,7 @@ func on_group_spawn_timing_reached(group_data: WaveGroupData) -> void :
 		if unit_wave_data.type == EntityType.ENEMY and not group_data.is_loot:
 			number += number * coop_factor
 			number = max(1.0, number + number * enemy_modifier)
+			number *= special_wave_enemy_modifier
 		elif unit_wave_data.type == EntityType.NEUTRAL:
 			number += tree_modifier
 

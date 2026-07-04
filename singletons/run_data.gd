@@ -163,6 +163,11 @@ const ORIGINAL_WAVE_EVENTS = [
 	{"id": "frontier_chase", "name": "Frontier Chase", "health": 1.0, "damage": 1.05, "speed": 1.16, "materials": 1.22, "reward": 4, "map_size": 1.24, "duration": 1.05, "player_stats": [{"stat": "stat_range", "value": 20}]},
 	{"id": "unstable_reactor", "name": "Unstable Reactor", "health": 0.95, "damage": 1.2, "speed": 1.05, "materials": 1.28, "reward": 5, "map_size": 1.0, "duration": 0.78, "player_stats": [{"stat": "stat_percent_damage", "value": 8}, {"stat": "stat_attack_speed", "value": 8}]},
 	{"id": "rich_static", "name": "Rich Static", "health": 1.08, "damage": 1.08, "speed": 0.98, "materials": 1.32, "reward": 6, "map_size": 0.95, "duration": 1.0, "player_stats": [{"stat": "stat_luck", "value": 10}]},
+	{"id": "garden_siege", "name": "Garden Siege", "health": 1.08, "damage": 1.0, "speed": 0.96, "materials": 1.24, "reward": 5, "map_size": 1.05, "duration": 1.08, "enemy_count": 0.9, "trees": 3, "player_stats": [{"stat": "stat_engineering", "value": 5}, {"stat": "stat_harvesting", "value": 8}]},
+	{"id": "mirror_lawn", "name": "Mirror Lawn", "health": 0.9, "damage": 1.12, "speed": 1.14, "materials": 1.26, "reward": 5, "map_size": 0.82, "duration": 0.92, "enemy_count": 1.22, "player_stats": [{"stat": "stat_dodge", "value": 4}, {"stat": "stat_crit_chance", "value": 4}]},
+	{"id": "tax_season", "name": "Tax Season", "health": 1.2, "damage": 1.05, "speed": 0.96, "materials": 1.42, "reward": 7, "map_size": 1.0, "duration": 1.0, "enemy_count": 0.92, "player_stats": [{"stat": "stat_luck", "value": 8}]},
+	{"id": "meteor_night", "name": "Meteor Night", "health": 0.88, "damage": 1.25, "speed": 1.18, "materials": 1.22, "reward": 6, "map_size": 1.12, "duration": 0.75, "enemy_count": 1.08, "player_stats": [{"stat": "stat_attack_speed", "value": 10}, {"stat": "stat_speed", "value": 5}]},
+	{"id": "library_lockdown", "name": "Library Lockdown", "health": 1.16, "damage": 1.08, "speed": 0.88, "materials": 1.3, "reward": 6, "map_size": 0.9, "duration": 1.12, "enemy_count": 0.86, "player_stats": [{"stat": "stat_range", "value": 25}, {"stat": "stat_elemental_damage", "value": 3}]},
 ]
 
 const ORIGINAL_WAVE_MUTATIONS = [
@@ -172,12 +177,17 @@ const ORIGINAL_WAVE_MUTATIONS = [
 	{"id": "mini", "name": "Mini", "health_pct": -25, "damage_pct": -8, "speed_pct": 25, "materials": 1.1, "scale": 0.72, "color": [0.45, 0.95, 0.75]},
 	{"id": "bulwark", "name": "Bulwark", "health_pct": 45, "damage_pct": 12, "speed_pct": -18, "materials": 1.22, "scale": 1.16, "color": [0.72, 0.62, 0.92]},
 	{"id": "static", "name": "Static", "health_pct": 8, "damage_pct": 18, "speed_pct": 8, "materials": 1.2, "scale": 1.0, "color": [0.5, 1.0, 0.45]},
+	{"id": "regenerator", "name": "Regenerator", "health_pct": 55, "damage_pct": -4, "speed_pct": -6, "materials": 1.24, "scale": 1.08, "color": [0.36, 1.0, 0.58]},
+	{"id": "glass_cannon", "name": "Glass Cannon", "health_pct": -35, "damage_pct": 36, "speed_pct": 10, "materials": 1.18, "scale": 0.94, "color": [0.9, 0.95, 1.0]},
+	{"id": "collector", "name": "Collector", "health_pct": 18, "damage_pct": 8, "speed_pct": -2, "materials": 1.45, "scale": 1.02, "color": [1.0, 0.88, 0.42]},
+	{"id": "sprinter", "name": "Sprinter", "health_pct": -10, "damage_pct": 8, "speed_pct": 38, "materials": 1.2, "scale": 0.88, "color": [0.3, 0.75, 1.0]},
 ]
 
 var current_run_accessibility_settings: Dictionary
 var base_run_accessibility_settings: = {}
 var active_original_wave_event: = {}
 var active_original_wave_mutation: = {}
+var pending_original_wave_choices: = []
 var constant_projectile: = 1
 
 var current_living_enemies: = 0
@@ -286,18 +296,50 @@ func on_wave_end() -> void :
 
 
 func roll_original_wave_event() -> Dictionary:
+	var choices = roll_original_wave_event_choices(1)
+	if choices.empty():
+		return {}
+
+	choose_original_wave_event(0)
+	return active_original_wave_event.duplicate()
+
+
+func roll_original_wave_event_choices(choice_count: int = 3) -> Array:
 	clear_original_wave_event()
+	pending_original_wave_choices.clear()
 
 	if current_wave <= 1 or current_wave >= nb_of_waves:
-		return {}
+		return []
 
 	var special_wave_chance = clamp(0.25 + (sum_all_player_effects(Keys.original_wave_event_chance_hash) / 100.0), 0.0, 0.95)
 	var should_force_event = current_wave % 3 == 0
 	if not should_force_event and randf() > special_wave_chance:
+		return []
+
+	var used_choices = {}
+	var attempts = 0
+	while pending_original_wave_choices.size() < choice_count and attempts < choice_count * 12:
+		attempts += 1
+		var event = ORIGINAL_WAVE_EVENTS[randi() % ORIGINAL_WAVE_EVENTS.size()].duplicate(true)
+		var mutation = ORIGINAL_WAVE_MUTATIONS[randi() % ORIGINAL_WAVE_MUTATIONS.size()].duplicate(true)
+		var choice_key = event.get("id", "") + "::" + mutation.get("id", "")
+		if used_choices.has(choice_key):
+			continue
+		used_choices[choice_key] = true
+		pending_original_wave_choices.push_back({"event": event, "mutation": mutation})
+
+	return pending_original_wave_choices.duplicate(true)
+
+
+func choose_original_wave_event(choice_index: int) -> Dictionary:
+	if pending_original_wave_choices.empty():
 		return {}
 
-	active_original_wave_event = ORIGINAL_WAVE_EVENTS[randi() % ORIGINAL_WAVE_EVENTS.size()].duplicate()
-	active_original_wave_mutation = ORIGINAL_WAVE_MUTATIONS[randi() % ORIGINAL_WAVE_MUTATIONS.size()].duplicate()
+	var safe_index = int(clamp(choice_index, 0, pending_original_wave_choices.size() - 1))
+	var choice = pending_original_wave_choices[safe_index]
+	active_original_wave_event = choice.event.duplicate(true)
+	active_original_wave_mutation = choice.mutation.duplicate(true)
+	pending_original_wave_choices.clear()
 	_apply_original_wave_event_scaling()
 	return active_original_wave_event.duplicate()
 
@@ -307,6 +349,7 @@ func clear_original_wave_event() -> void:
 		current_run_accessibility_settings = base_run_accessibility_settings.duplicate()
 	active_original_wave_event.clear()
 	active_original_wave_mutation.clear()
+	pending_original_wave_choices.clear()
 
 
 func has_original_wave_event() -> bool:
@@ -327,6 +370,34 @@ func get_original_wave_display_name() -> String:
 	if event_name != "" and mutation_name != "":
 		return event_name + " / " + mutation_name
 	return event_name
+
+
+func get_original_wave_choice_text(choice: Dictionary) -> String:
+	var event = choice.get("event", {})
+	var mutation = choice.get("mutation", {})
+	if event.empty() or mutation.empty():
+		return ""
+
+	var enemy_count = int(round(event.get("enemy_count", 1.0) * 100.0))
+	var map_size = int(round(event.get("map_size", 1.0) * 100.0))
+	var duration = int(round(event.get("duration", 1.0) * 100.0))
+	var materials = int(round(event.get("materials", 1.0) * mutation.get("materials", 1.0) * 100.0))
+
+	var stat_lines = []
+	for stat_bonus in event.get("player_stats", []):
+		var stat_value = int(stat_bonus.value)
+		var stat_prefix = "+" if stat_value >= 0 else ""
+		stat_lines.push_back("%s %s%s" % [tr(stat_bonus.stat.to_upper()), stat_prefix, str(stat_value)])
+
+	return "%s\n%s\n\nMaterials %s%%\nEnemies %s%%  Map %s%%\nDuration %s%%\n%s" % [
+		event.get("name", "Special Wave"),
+		mutation.get("name", "Mutated"),
+		str(materials),
+		str(enemy_count),
+		str(map_size),
+		str(duration),
+		PoolStringArray(stat_lines).join("\n")
+	]
 
 
 func get_original_wave_event_material_mult() -> float:
@@ -359,6 +430,16 @@ func get_original_wave_event_gradient_color(fallback: Color) -> Color:
 			return Color(0.42, 0.9, 0.44)
 		"rich_static":
 			return Color(0.72, 0.52, 0.24)
+		"garden_siege":
+			return Color(0.22, 0.62, 0.28)
+		"mirror_lawn":
+			return Color(0.44, 0.76, 0.88)
+		"tax_season":
+			return Color(0.78, 0.58, 0.2)
+		"meteor_night":
+			return Color(0.74, 0.24, 0.16)
+		"library_lockdown":
+			return Color(0.22, 0.24, 0.58)
 		_:
 			return fallback
 
@@ -369,6 +450,24 @@ func apply_original_wave_event_player_stats(player_index: int) -> void:
 		var stat_value = int(stat_bonus.value)
 		TempStats.add_stat(stat_hash, stat_value, player_index)
 		emit_signal("stat_added", stat_hash, stat_value, 0.0, player_index)
+
+	for special_wave_stat in get_player_effect(Keys.original_wave_event_stats_hash, player_index):
+		assert (special_wave_stat[0] is int)
+		var special_stat_hash = special_wave_stat[0]
+		var special_stat_value = int(special_wave_stat[1])
+		TempStats.add_stat(special_stat_hash, special_stat_value, player_index)
+		emit_signal("stat_added", special_stat_hash, special_stat_value, 0.0, player_index)
+
+
+func get_original_wave_event_enemy_count_mult() -> float:
+	return active_original_wave_event.get("enemy_count", 1.0)
+
+
+func get_original_wave_event_tree_bonus() -> int:
+	if active_original_wave_event.empty():
+		return 0
+
+	return int(active_original_wave_event.get("trees", 0) + sum_all_player_effects(Keys.original_wave_event_trees_hash))
 
 
 func award_original_wave_event_rewards() -> void:

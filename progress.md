@@ -110,3 +110,48 @@ Original prompt: 这个是我的游戏项目，但是有很多bug，之前添加
 - Mutations visually tint and scale enemies when they spawn or respawn.
 - Mutation material multipliers now stack with original special-wave material multipliers and clear rewards.
 - Validation passed with `Godot_v3.7-dev1_win64.exe --path ... --quit --verbose`.
+
+## 2026-07-04 Special Wave 2.0 Character Pack
+
+- Expanded original special waves into richer rule variants with enemy-count and tree-count modifiers.
+- Added five new wave variants:
+  - `Garden Siege`: more trees, engineering/harvesting boost, slightly slower pressure.
+  - `Mirror Lawn`: compact high-density wave with dodge/crit tempo.
+  - `Tax Season`: tougher but richer wave with higher clear reward.
+  - `Meteor Night`: short, dangerous speed wave with attack-speed payoff.
+  - `Library Lockdown`: slower control wave with range/elemental bonuses.
+- Added four new enemy mutations:
+  - `Regenerator`, `Glass Cannon`, `Collector`, and `Sprinter`.
+- Added two reusable special-wave mechanics:
+  - `original_wave_event_stats`: grants temporary stats only during special waves.
+  - `original_wave_event_trees`: adds extra trees only during special waves.
+- Added three unlocked original characters:
+  - `Lawn Engineer`: tree/structure character that gets extra special-wave trees and Engineering.
+  - `Comet Runner`: speed/event character that spikes Attack Speed during special waves.
+  - `Echo Librarian`: special-wave reward character with Luck, XP gain, and range-focused special waves.
+- Added three unlocked original items:
+  - `Seed Vault`: harvesting, special-wave trees, and special-wave rewards.
+  - `Meteor Coupon`: more special waves and temporary special-wave speed/attack speed, with enemy damage risk.
+  - `Echo Bookmark`: Luck, special-wave rewards, and special-wave range.
+- Added `tools/generate_original_content_assets.gd` to generate small layered character sprites and item icons safely.
+- Validation passed:
+  - Asset generation script: `Godot_v3.7-dev1_win64.exe --path ... -s res://tools/generate_original_content_assets.gd`.
+  - Project parse/startup: `Godot_v3.7-dev1_win64.exe --path ... --quit --verbose`.
+  - Temporary original content loader checked all six new resources and was removed afterward.
+
+## 2026-07-04 Special Wave Draft UI
+
+- Added a lightweight special-wave draft system.
+- Special waves now generate up to three event/mutation candidates before the wave starts.
+- When a special wave triggers, the run pauses before map initialization and shows three selectable rule cards.
+- Each card displays:
+  - Event name and mutation name.
+  - Material multiplier.
+  - Enemy-count, map-size, and duration modifiers.
+  - Temporary player stat bonuses for that wave.
+- Choosing a card activates that event/mutation before map size, background tint, wave timer, and spawns are initialized.
+- Preserved the old `roll_original_wave_event()` API as an auto-select wrapper for compatibility.
+- Added cursor/pause guards while the draft overlay is active so the game does not access players before they are spawned.
+- Validation passed:
+  - Project parse/startup: `Godot_v3.7-dev1_win64.exe --path ... --quit --verbose`.
+  - Temporary wave draft script dynamically loaded `RunData`, generated three choices, selected one, checked active event state and enemy-count multiplier, then was removed.

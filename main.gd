@@ -2,6 +2,7 @@ class_name Main
 extends Node
 
 signal gold_spawned()
+signal original_wave_choice_selected()
 
 export (PackedScene) var gold_bag_scene: PackedScene
 export (PackedScene) var gold_scene: PackedScene
@@ -63,6 +64,8 @@ var _skip_pause_check = false
 var _crosshair_cursor_active: = false
 var _current_pool_id: int = Keys.empty_hash
 var _current_pool = null
+var _original_wave_choice_active: = false
+var _original_wave_choice_overlay: Control = null
 
 var _spawn_projectile_args: = WeaponServiceSpawnProjectileArgs.new()
 var _take_damage_args: = TakeDamageArgs.new( - 1)
@@ -135,7 +138,10 @@ func _ready() -> void :
 	_updatehidingHUD()
 
 	RunData.on_wave_start(_wave_timer)
-	RunData.roll_original_wave_event()
+	var original_wave_choices = RunData.roll_original_wave_event_choices()
+	if not original_wave_choices.empty():
+		_show_original_wave_choice_overlay(original_wave_choices)
+		yield(self, "original_wave_choice_selected")
 	_next_gold_player = Utils.randi() % RunData.get_player_count()
 
 	var _popup = _challenge_completed_ui.connect("started", self, "on_chal_popup")
@@ -308,6 +314,74 @@ func _updatehidingHUD() -> void :
 		$WorldUI.show()
 
 
+func _show_original_wave_choice_overlay(choices: Array) -> void:
+	_original_wave_choice_active = true
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+	var overlay = Control.new()
+	overlay.name = "OriginalWaveChoiceOverlay"
+	overlay.pause_mode = Node.PAUSE_MODE_PROCESS
+	overlay.set_anchors_and_margins_preset(Control.PRESET_WIDE)
+	$UI.add_child(overlay)
+	_original_wave_choice_overlay = overlay
+
+	var dim = ColorRect.new()
+	dim.color = Color(0.02, 0.025, 0.03, 0.86)
+	dim.set_anchors_and_margins_preset(Control.PRESET_WIDE)
+	overlay.add_child(dim)
+
+	var panel = VBoxContainer.new()
+	panel.anchor_left = 0.5
+	panel.anchor_top = 0.5
+	panel.anchor_right = 0.5
+	panel.anchor_bottom = 0.5
+	panel.margin_left = -470
+	panel.margin_top = -235
+	panel.margin_right = 470
+	panel.margin_bottom = 235
+	panel.add_constant_override("separation", 18)
+	overlay.add_child(panel)
+
+	var title = Label.new()
+	title.align = Label.ALIGN_CENTER
+	title.text = "SPECIAL WAVE DRAFT"
+	title.rect_min_size = Vector2(940, 36)
+	panel.add_child(title)
+
+	var subtitle = Label.new()
+	subtitle.align = Label.ALIGN_CENTER
+	subtitle.text = "Choose one rule for this wave. Higher risk means richer tempo."
+	subtitle.rect_min_size = Vector2(940, 28)
+	panel.add_child(subtitle)
+
+	var cards = HBoxContainer.new()
+	cards.add_constant_override("separation", 18)
+	panel.add_child(cards)
+
+	for i in choices.size():
+		var button = Button.new()
+		button.text = RunData.get_original_wave_choice_text(choices[i])
+		button.rect_min_size = Vector2(300, 320)
+		button.focus_mode = Control.FOCUS_ALL
+		button.connect("pressed", self, "_on_original_wave_choice_pressed", [i])
+		cards.add_child(button)
+		if i == 0:
+			button.grab_focus()
+
+
+func _on_original_wave_choice_pressed(choice_index: int) -> void:
+	if not _original_wave_choice_active:
+		return
+
+	RunData.choose_original_wave_event(choice_index)
+	if is_instance_valid(_original_wave_choice_overlay):
+		_original_wave_choice_overlay.queue_free()
+	_original_wave_choice_overlay = null
+	_original_wave_choice_active = false
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	emit_signal("original_wave_choice_selected")
+
+
 func _init_half_second_timers() -> void :
 	var timer_wait_time: = 0.5
 	var player_count: int = RunData.get_player_count()
@@ -381,6 +455,10 @@ func _process(_delta: float) -> void :
 
 
 func _handle_manual_aim_visuals() -> void :
+	if _original_wave_choice_active:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		return
+
 	if RunData.is_coop_run:
 		return
 
@@ -419,6 +497,9 @@ func _set_crosshair_cursor(enable: bool) -> void :
 
 
 func _check_for_pause() -> void :
+	if _original_wave_choice_active:
+		return
+
 	if _skip_pause_check:
 		_skip_pause_check = false
 		return

@@ -99,12 +99,18 @@ func _ready() -> void :
 		_register_custom_resource(characters, ProgressData.characters_unlocked, "res://custom_elements/characters/orchard_alchemist/orchard_alchemist_data.tres")
 		_register_custom_resource(characters, ProgressData.characters_unlocked, "res://custom_elements/characters/pocket_brawler/pocket_brawler_data.tres")
 		_register_custom_resource(characters, ProgressData.characters_unlocked, "res://custom_elements/characters/reactor_saint/reactor_saint_data.tres")
+		_register_custom_resource(characters, ProgressData.characters_unlocked, "res://custom_elements/characters/lawn_engineer/lawn_engineer_data.tres")
+		_register_custom_resource(characters, ProgressData.characters_unlocked, "res://custom_elements/characters/comet_runner/comet_runner_data.tres")
+		_register_custom_resource(characters, ProgressData.characters_unlocked, "res://custom_elements/characters/echo_librarian/echo_librarian_data.tres")
 		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/antigravity_device/antigravity_device_data.tres")
 		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/event_contract/event_contract_data.tres")
 		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/void_marinade/void_marinade_data.tres")
 		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/paper_crown/paper_crown_data.tres")
 		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/pocket_arena_ticket/pocket_arena_ticket_data.tres")
 		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/reactor_pebble/reactor_pebble_data.tres")
+		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/seed_vault/seed_vault_data.tres")
+		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/meteor_coupon/meteor_coupon_data.tres")
+		_register_custom_resource(items, ProgressData.items_unlocked, "res://custom_elements/items/echo_bookmark/echo_bookmark_data.tres")
 
 	Utils.reset_stat_keys()
 
