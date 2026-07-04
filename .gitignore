@@ -1,0 +1,20 @@
+# Godot generated/import cache
+.import/
+.godot/
+
+# Runtime/user-local files
+user://
+*.log
+*.tmp
+*.bak
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+
+# Local validation helpers should be recreated when needed
+validate_*.gd
+validate_*.gd.import

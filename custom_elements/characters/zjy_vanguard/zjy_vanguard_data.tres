@@ -1,0 +1,42 @@
+[gd_resource type="Resource" load_steps=16 format=2]
+
+[ext_resource path="res://items/characters/character_data.gd" type="Script" id=1]
+[ext_resource path="res://custom_elements/characters/zjy_vanguard/zjy_vanguard_icon_texture.tres" type="Texture" id=2]
+[ext_resource path="res://custom_elements/characters/zjy_vanguard/speed_effect.tres" type="Resource" id=3]
+[ext_resource path="res://custom_elements/characters/zjy_vanguard/dodge_effect.tres" type="Resource" id=4]
+[ext_resource path="res://custom_elements/characters/zjy_vanguard/armor_tradeoff_effect.tres" type="Resource" id=5]
+[ext_resource path="res://custom_elements/characters/zjy_vanguard/charge_attack_speed_effect.tres" type="Resource" id=6]
+[ext_resource path="res://custom_elements/characters/zjy_vanguard/charge_speed_effect.tres" type="Resource" id=7]
+[ext_resource path="res://weapons/ranged/pistol/1/pistol_data.tres" type="Resource" id=8]
+[ext_resource path="res://weapons/ranged/smg/1/smg_data.tres" type="Resource" id=9]
+[ext_resource path="res://weapons/melee/lightning_shiv/1/lightning_shiv_data.tres" type="Resource" id=10]
+[ext_resource path="res://weapons/ranged/shuriken/1/shuriken_data.tres" type="Resource" id=11]
+[ext_resource path="res://custom_elements/characters/zjy_vanguard/zjy_vanguard_aura_appearance.tres" type="Resource" id=12]
+[ext_resource path="res://custom_elements/characters/zjy_vanguard/zjy_vanguard_body_appearance.tres" type="Resource" id=13]
+[ext_resource path="res://custom_elements/characters/zjy_vanguard/zjy_vanguard_eyes_appearance.tres" type="Resource" id=14]
+[ext_resource path="res://custom_elements/characters/zjy_vanguard/zjy_vanguard_mouth_appearance.tres" type="Resource" id=15]
+
+[resource]
+script = ExtResource( 1 )
+my_id = "character_zjy_vanguard"
+unlocked_by_default = true
+can_be_looted = true
+icon = ExtResource( 2 )
+name = "ZJY Vanguard"
+tier = 0
+value = 1
+effects = [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ) ]
+tracking_text = ""
+is_lockable = true
+unlock_codex_descr_after_get_it = 1
+is_cursed = false
+curse_factor = 0.0
+max_nb = -1
+item_appearances = [ ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 15 ) ]
+tags = [  ]
+wanted_tags = [ "stat_speed", "stat_dodge", "stat_attack_speed" ]
+banned_item_groups = [  ]
+banned_items = [  ]
+banned_upgrades = [  ]
+starting_weapons = [ ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ) ]
+starting_items = [  ]
