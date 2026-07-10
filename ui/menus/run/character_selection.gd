@@ -107,6 +107,10 @@ func init_coop_service() -> void :
 	else:
 		_play_mode_init(RunData.play_mode, false)
 	RunData.menu_selection_back = false
+
+	if LocalTunnelCoopService.should_force_coop_host():
+		_play_mode_init(RunData.PlayMode.COOP, true)
+		LocalTunnelCoopService.ensure_online_players_in_coop()
 	
 
 	_update_character_selection_player_count_ui()
@@ -119,6 +123,10 @@ func _reset_stale_play_mode_for_new_selection() -> void:
 	if RunData.menu_selection_back:
 		return
 	if Utils.on_nintendo_nx_or_ounce:
+		return
+	if LocalTunnelCoopService.should_force_coop_host():
+		RunData.play_mode = RunData.PlayMode.COOP
+		RunData.set_coop_run(true)
 		return
 	RunData.play_mode = RunData.PlayMode.SOLO
 	RunData.set_coop_run(false)

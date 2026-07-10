@@ -32,6 +32,8 @@ onready var right_container = $"MarginContainer/VBoxContainer/HBoxContainer/Butt
 const ONLINE_LAB_PORT := 27450
 
 var _online_lab_button: Button = null
+var _online_lab_join_button: Button = null
+var _online_lab_address_input: LineEdit = null
 var _online_lab_status_label: Label = null
 var _online_lab_clients: = 0
 
@@ -50,6 +52,7 @@ func testActivity(act: String) -> void :
 
 func _process(_delta: float) -> void :
 	_sync_original_menu_chrome_visibility()
+	_refresh_online_lab_status()
 
 	var act = ProgressData.get_pending_dlc_change()
 	if act == true:
@@ -107,6 +110,19 @@ func _process(_delta: float) -> void :
 
 		setup_menu()
 		_apply_original_menu_theme()
+
+
+func _input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if not (event is InputEventKey):
+		return
+	if not event.pressed or event.echo:
+		return
+	if event.scancode == KEY_F9:
+		_on_OnlineLabButton_pressed()
+	elif event.scancode == KEY_F10:
+		_on_OnlineLabJoinButton_pressed()
 
 
 func refresh_menu() -> void :
@@ -369,9 +385,15 @@ func _apply_original_menu_theme() -> void:
 
 	if _online_lab_button != null:
 		_style_menu_button(_online_lab_button, Color(0.25, 0.95, 0.83, 1), true)
-		_online_lab_button.text = "ONLINE LAB: STOP" if LocalTunnelCoopService.is_hosting() else "ONLINE LAB"
-		_online_lab_button.rect_min_size = Vector2(360, 58)
+		_online_lab_button.text = "HOST: STOP" if LocalTunnelCoopService.is_hosting() else "HOST ONLINE"
+		_online_lab_button.rect_min_size = Vector2(360, 54)
 		_online_lab_button.size_flags_horizontal = SIZE_SHRINK_END
+
+	if _online_lab_join_button != null:
+		_style_menu_button(_online_lab_join_button, Color(0.48, 0.72, 1.0, 1), true)
+		_online_lab_join_button.text = "LEAVE HOST" if LocalTunnelCoopService.is_client_connected() else "JOIN HOST"
+		_online_lab_join_button.rect_min_size = Vector2(360, 54)
+		_online_lab_join_button.size_flags_horizontal = SIZE_SHRINK_END
 
 	for button in right_container.get_children():
 		if button is Button:
@@ -479,14 +501,31 @@ func _ensure_online_lab_status_card() -> void:
 		var label_font = load("res://resources/fonts/actual/base/font_22.tres")
 		if label_font != null:
 			label.add_font_override("font", label_font)
-		margin.add_child(label)
 
-	_online_lab_status_label = card.get_node("Margin/StatusLabel")
+		var vbox = VBoxContainer.new()
+		vbox.name = "VBox"
+		vbox.add_constant_override("separation", 8)
+		margin.add_child(vbox)
+		vbox.add_child(label)
+
+		var line = LineEdit.new()
+		line.name = "AddressInput"
+		line.text = "127.0.0.1:27450"
+		line.placeholder_text = "host or tunnel address, e.g. 192.168.1.8:27450"
+		line.rect_min_size = Vector2(360, 36)
+		line.add_color_override("font_color", Color(0.92, 1.0, 0.96, 1))
+		line.add_color_override("cursor_color", Color(0.25, 0.95, 0.83, 1))
+		vbox.add_child(line)
+
+	_online_lab_status_label = card.get_node("Margin/VBox/StatusLabel")
+	_online_lab_address_input = card.get_node("Margin/VBox/AddressInput")
 
 
 func _ensure_online_lab_button() -> void:
 	if _online_lab_button == null:
 		_online_lab_button = right_container.get_node_or_null("OnlineLabButton")
+	if _online_lab_join_button == null:
+		_online_lab_join_button = right_container.get_node_or_null("OnlineLabJoinButton")
 
 	if _online_lab_button == null:
 		_online_lab_button = Button.new()
@@ -497,8 +536,19 @@ func _ensure_online_lab_button() -> void:
 		right_container.add_child(_online_lab_button)
 		right_container.move_child(_online_lab_button, min(1, right_container.get_child_count() - 1))
 
+	if _online_lab_join_button == null:
+		_online_lab_join_button = Button.new()
+		_online_lab_join_button.name = "OnlineLabJoinButton"
+		_online_lab_join_button.align = 0
+		_online_lab_join_button.expand_icon = true
+		_online_lab_join_button.set_script(load("res://ui/menus/global/my_menu_button.gd"))
+		right_container.add_child(_online_lab_join_button)
+		right_container.move_child(_online_lab_join_button, min(2, right_container.get_child_count() - 1))
+
 	if not _online_lab_button.is_connected("pressed", self, "_on_OnlineLabButton_pressed"):
 		_online_lab_button.connect("pressed", self, "_on_OnlineLabButton_pressed")
+	if not _online_lab_join_button.is_connected("pressed", self, "_on_OnlineLabJoinButton_pressed"):
+		_online_lab_join_button.connect("pressed", self, "_on_OnlineLabJoinButton_pressed")
 
 	if not LocalTunnelCoopService.is_connected("host_started", self, "_on_online_lab_host_started"):
 		LocalTunnelCoopService.connect("host_started", self, "_on_online_lab_host_started")
@@ -508,6 +558,16 @@ func _ensure_online_lab_button() -> void:
 		LocalTunnelCoopService.connect("client_connected", self, "_on_online_lab_client_count_changed")
 	if not LocalTunnelCoopService.is_connected("client_disconnected", self, "_on_online_lab_client_count_changed"):
 		LocalTunnelCoopService.connect("client_disconnected", self, "_on_online_lab_client_count_changed")
+	if not LocalTunnelCoopService.is_connected("join_started", self, "_on_online_lab_join_started"):
+		LocalTunnelCoopService.connect("join_started", self, "_on_online_lab_join_started")
+	if not LocalTunnelCoopService.is_connected("join_connected", self, "_on_online_lab_join_connected"):
+		LocalTunnelCoopService.connect("join_connected", self, "_on_online_lab_join_connected")
+	if not LocalTunnelCoopService.is_connected("join_failed", self, "_on_online_lab_join_failed"):
+		LocalTunnelCoopService.connect("join_failed", self, "_on_online_lab_join_failed")
+	if not LocalTunnelCoopService.is_connected("join_stopped", self, "_on_online_lab_join_stopped"):
+		LocalTunnelCoopService.connect("join_stopped", self, "_on_online_lab_join_stopped")
+	if not LocalTunnelCoopService.is_connected("state_snapshot_received", self, "_on_online_lab_state_snapshot_received"):
+		LocalTunnelCoopService.connect("state_snapshot_received", self, "_on_online_lab_state_snapshot_received")
 
 
 func _style_menu_button(button: Button, accent: Color, primary: bool = false) -> void:
@@ -577,25 +637,65 @@ func _on_OnlineLabButton_pressed() -> void:
 
 	var error = LocalTunnelCoopService.start_host(ONLINE_LAB_PORT)
 	if error != OK:
-		_set_online_lab_status("ONLINE LAB 启动失败：端口 %s 被占用或系统拒绝监听。\n先关掉旧进程，或者之后把端口改掉再试。" % str(ONLINE_LAB_PORT))
+		_set_online_lab_status("HOST failed: TCP %s is busy or blocked." % str(ONLINE_LAB_PORT))
+
+
+func _on_OnlineLabJoinButton_pressed() -> void:
+	if LocalTunnelCoopService.is_client_connected():
+		LocalTunnelCoopService.stop_client()
+		return
+
+	var raw_address = "127.0.0.1:%s" % str(ONLINE_LAB_PORT)
+	if _online_lab_address_input != null:
+		raw_address = _online_lab_address_input.text
+	var parsed = LocalTunnelCoopService.parse_address_port(raw_address)
+	var error = LocalTunnelCoopService.start_client(parsed["address"], parsed["port"])
+	if error != OK:
+		_set_online_lab_status("JOIN failed: %s:%s" % [parsed["address"], str(parsed["port"])])
 
 
 func _on_online_lab_host_started(port: int, address: String) -> void:
 	_online_lab_clients = 0
 	if _online_lab_button != null:
-		_online_lab_button.text = "ONLINE LAB: STOP"
+		_online_lab_button.text = "HOST: STOP"
 	_refresh_online_lab_status(port, address)
 
 
 func _on_online_lab_host_stopped() -> void:
 	_online_lab_clients = 0
 	if _online_lab_button != null:
-		_online_lab_button.text = "ONLINE LAB"
+		_online_lab_button.text = "HOST ONLINE"
 	_refresh_online_lab_status()
 
 
 func _on_online_lab_client_count_changed(count: int) -> void:
 	_online_lab_clients = count
+	_refresh_online_lab_status()
+
+
+func _on_online_lab_join_started(address: String, port: int) -> void:
+	_set_online_lab_status("JOIN connecting to %s:%s ..." % [address, str(port)])
+
+
+func _on_online_lab_join_connected(address: String, port: int) -> void:
+	if _online_lab_join_button != null:
+		_online_lab_join_button.text = "LEAVE HOST"
+	_set_online_lab_status("JOIN connected: sending local input to %s:%s.\nUse host screen share / local display to play P2." % [address, str(port)])
+
+
+func _on_online_lab_join_failed(message: String) -> void:
+	if _online_lab_join_button != null:
+		_online_lab_join_button.text = "JOIN HOST"
+	_set_online_lab_status("JOIN failed: %s" % message)
+
+
+func _on_online_lab_join_stopped() -> void:
+	if _online_lab_join_button != null:
+		_online_lab_join_button.text = "JOIN HOST"
+	_refresh_online_lab_status()
+
+
+func _on_online_lab_state_snapshot_received(_snapshot: Dictionary) -> void:
 	_refresh_online_lab_status()
 
 
@@ -605,14 +705,20 @@ func _refresh_online_lab_status(port: int = ONLINE_LAB_PORT, address: String = "
 
 	if LocalTunnelCoopService.is_hosting():
 		var host_address = address if not address.empty() else LocalTunnelCoopService.get_lan_address()
-		_set_online_lab_status("ONLINE LAB 已开房：%s:%s\n玩家 2 走同局域网，或用 ngrok/frp 转发 TCP %s。\n已连接：%s  |  目前是联机实验室，还不是完整战斗同步。" % [
+		_set_online_lab_status("HOST: %s:%s | clients: %s\nP2 = virtual device %s. Start = COOP character select.\nTunnel TCP %s with ngrok/frp for internet play." % [
 			host_address,
 			str(port),
-			str(port),
-			str(_online_lab_clients)
+			str(_online_lab_clients),
+			str(LocalTunnelCoopService.REMOTE_PLAYER_DEVICE_ID),
+			str(port)
 		])
+	elif LocalTunnelCoopService.is_client_connected():
+		_set_online_lab_status("JOIN connected. Sending movement/menu input to host.\n%s" % LocalTunnelCoopService.get_last_state_summary())
+	elif LocalTunnelCoopService.is_online_session_active():
+		var target = LocalTunnelCoopService.parse_address_port(_online_lab_address_input.text if _online_lab_address_input != null else "")
+		_set_online_lab_status("JOIN connecting...\nTarget: %s:%s" % [target["address"], str(target["port"])])
 	else:
-		_set_online_lab_status("本地合作已保留；ONLINE LAB 未启动。\n官方偏本地/同屏合作，我们先做本机服务器 + 隧道入口。\n下一步才是远程输入和战斗状态同步。")
+		_set_online_lab_status("Online Lab ready.\nHOST opens local TCP %s. JOIN connects to host/tunnel address.\nCurrent build: host-authoritative battle + remote P2 input + state sync." % str(ONLINE_LAB_PORT))
 
 
 func _set_online_lab_status(text: String) -> void:
@@ -623,6 +729,10 @@ func _set_online_lab_status(text: String) -> void:
 func _on_StartButton_pressed() -> void :
 	MusicManager.tween( - 5)
 	ProgressData.start_activity()
+	if LocalTunnelCoopService.should_force_coop_host():
+		RunData.play_mode = RunData.PlayMode.COOP
+		RunData.set_coop_run(true)
+		LocalTunnelCoopService.ensure_online_players_in_coop()
 	var _error = get_tree().change_scene(MenuData.character_selection_scene)
 
 
