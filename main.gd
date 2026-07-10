@@ -319,7 +319,7 @@ func _show_original_wave_choice_overlay(choices: Array) -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 	var choice_count = max(choices.size(), 1)
-	var viewport_width = get_viewport_rect().size.x
+	var viewport_width = get_viewport().size.x
 	var panel_width = int(min(1180, max(760, viewport_width - 80)))
 	var card_gap = 14
 	var card_width = int((panel_width - card_gap * (choice_count - 1)) / choice_count)

@@ -41,16 +41,16 @@ func get_icon(_player_index: int):
 		"original_draft_captain":
 			return load("res://items/consumables/item_box/item_box_icon.png")
 		"original_lawn_engineer":
-			return ItemService.get_stat_small_icon(Keys.stat_engineering_hash)
+			return load("res://items/stats/engineering.png")
 		"original_comet_runner":
-			return ItemService.get_stat_small_icon(Keys.stat_speed_hash)
+			return load("res://items/stats/speed.png")
 		"original_echo_librarian":
-			return ItemService.get_stat_small_icon(Keys.xp_gain_hash)
+			return load("res://items/materials/material_ui.png")
 		"original_orchard_alchemist":
-			return ItemService.get_stat_small_icon(Keys.stat_elemental_damage_hash)
+			return load("res://items/stats/elemental_damage.png")
 		"original_void_chef":
-			return ItemService.get_stat_small_icon(Keys.explosion_damage_hash)
+			return load("res://items/all/plastic_explosive/plastic_explosive_icon.png")
 		"original_paper_samurai":
-			return ItemService.get_stat_small_icon(Keys.stat_crit_chance_hash)
+			return load("res://items/stats/crit_chance.png")
 		_:
 			return load("res://items/materials/material_ui.png")
